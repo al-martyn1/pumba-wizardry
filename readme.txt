@@ -46,6 +46,7 @@ Installation:
        "pip install pyqt5" - for install required GUI module PyQt5
 
        "pip install mako"  - for install required templating module Mako
+                             https://docs.makotemplates.org/en/latest/usage.html
 
 
    If you got an errors, try next:
