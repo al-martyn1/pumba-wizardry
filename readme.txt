@@ -18,7 +18,7 @@ Installation:
       Select "Do not add to PATH environment variable"
 
 
-   Download Python2
+   Download Python3
        x86 - https://www.python.org/ftp/python/3.8.0/python-3.8.0.exe
     or x64 - https://www.python.org/ftp/python/3.8.0/python-3.8.0-amd64.exe
 
