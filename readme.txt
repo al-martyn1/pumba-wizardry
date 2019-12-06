@@ -83,6 +83,8 @@ Installation:
    Add "PW-FOLDER-NAME\super-pumba" folder to "PATH" environment variable 
        to get access to "Pumba Wizardry Super Pumba Super Wizard" from whatever.
 
+   Also, you can run "super-pumba" wizard as all other wizard using fully specified path.
+
 
 4) Install or create your "Pumba Wizardry"-powered wizards
 
