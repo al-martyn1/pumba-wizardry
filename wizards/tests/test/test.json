@@ -1,0 +1,262 @@
+{
+  "wizard" :
+    { 
+      "dummy-first":"",
+
+      "geometry":"AUTO",
+      "title":"Pumba Wizardry Test",
+      "icon":"pw.ico",
+      "banner":"",
+      "logo":"pw-logo.png",
+      "image":"pw-img.png",
+      "style":"classic",
+
+      "template":"",
+      "force-single-line":0,
+
+      "dummy-last":""
+    },
+
+  "values":
+    { 
+
+      "radio-choise-1":
+        {
+          "title":"Radio button 1",
+          "description":"Description of radiobutton #1"
+        },
+      "radio-choise-2":
+        {
+          "title":"Radio button 2",
+          "description":"Description of radiobutton #2"
+        },
+      "radio-choise-3":
+        {
+          "title":"Radio button 3",
+          "description":"Description of radiobutton #3"
+        },
+      "welcome":
+        {
+          "title":"Welcome",
+          "description":"Loop to welcome page"
+        },
+
+
+      "dropdown-val-1": {
+        "title": "Dropval One",
+        "long-title": "This is the dropval one value",
+        "description": "Description not required if used only in dropdowns"
+      },
+
+      "dropdown-val-2":
+        {
+          "title":"The Second Dropval",
+          "description":"Description not required if used only in dropdowns"
+        },
+
+
+      "dropdown-optional-val-1":
+        {
+          "title":"First value",
+          "long-title":"This is the First",
+          "description":"Description for the first value"
+        },
+      "dropdown-optional-val-2":
+        {
+          "title":"Second value",
+          "description":"Second value description"
+        }
+
+
+    },
+
+  "types":
+    { 
+      "test-page1":
+        {
+          "dummy-first":"",
+          "dummy-last":""
+        }
+    },
+
+
+  "pages" :
+    { 
+
+      "welcome":
+        {
+          "dummy-first":"",
+
+          "page-type":"welcome",
+          "title":"Welcome!",
+          "subtitle":"Welcome to the Pumba Wizardry Test wizard",
+          "description":"This wizard helps your to go through the rest of all Pumba Wizardry Test and sample pages",
+
+          "next-page":"listsinglesel-test",
+
+          "dummy-last":""
+        },
+
+      "listsinglesel-test":
+        {
+          "dummy-first":"",
+          
+          "page-type":"listsinglesel",
+          "title":"Wizard Single Selection List Test",
+          "subtitle":"Single Selection List selection and flow control choice test",
+          "description":"Single Selection List one of items in the list",
+
+          "next-page":"dropdowns-test",
+
+          "target-value":"listsinglesel-test",
+          "target-value-title":"Single Selection List test",
+
+          "list-choice":
+            [
+              { "value":"radio-choise-1"   },
+              { "value":"radio-choise-2"   },
+              { "value":"radio-choise-3"   },
+              { "value":"dropdown-val-1"   },
+              { "value":"dropdown-val-2"   },
+              { "value":"dropdown-optional-val-1"   },
+              { "value":"optional-dropdowns", "next-page":"optional-dropdowns", "text":"Go to optional dropdown test" },
+              { "value":"summary", "next-page":"summary", "text":"Go to summary (skip all other pages)" }
+            ],
+
+          "dummy-last":""
+        },
+
+
+      "dropdowns-test":
+        {
+          "dummy-first":"",
+
+          "page-type":"dropdowns",
+          "title":"Wizard Dropdown Comboboxes Test",
+          "subtitle":"Select value in dropdown list test ",
+          "description":"Select value in each dropdown",
+
+          "next-page":"radiobuttons-test",
+
+          "controls-width":"/3",
+          "dropdowns":
+            [
+                { "title":"Dropdown 1",
+                  "target-value":"dropdown1-res",
+                  "target-value-title":"Dropdown 1",
+                  "add-values-long-title":1,
+                  "values":
+                    [
+                      { "value":"radio-choise-1"   },
+                      { "value":"radio-choise-2", "default":1  },
+                      { "value":"radio-choise-3"   }
+                    ]
+                },
+
+                { "title":"Dropdown 2",
+                  "target-value":"dropdown2-res",
+                  "use-values-long-title":1,
+                  "values":
+                    [
+                      { "value":"dropdown-val-1"   },
+                      { "value":"dropdown-val-2", "default":1  }
+                    ]
+                },
+
+                { "title":"Dropdown 3 - same as Dropdown 2, but without default value",
+                  "target-value":"dropdown3-res",
+                  "values":
+                    [
+                      { "value":"dropdown-val-1"   },
+                      { "value":"dropdown-val-2" }
+                    ]
+                }
+            ],
+
+          "dummy-last":""
+        },
+
+
+      "radiobuttons-test":
+        {
+          "dummy-first":"",
+          
+          "page-type":"radio-choice",
+          "title":"Wizard Radiobuttons Test",
+          "subtitle":"Radiobuttons value selection and flow control choice test",
+          "description":"Select one of three first items or choose last one to go directly to summary final page",
+
+          "next-page":"test-page3",
+
+          "target-value":"radiobuttons-test",
+          "target-value-title":"Radiobuttons test",
+
+          "default-choice":"radio-choise-3",
+          "radio-choice":
+            [
+              { "value":"radio-choise-1"   },
+              { "value":"radio-choise-2", "default":1  },
+              { "value":"radio-choise-3"   },
+              { "value":"optional-dropdowns", "next-page":"optional-dropdowns", "text":"Go to optional dropdown test" },
+              { "value":"summary", "next-page":"summary", "text":"Go to summary (skip all other pages)" }
+            ],
+
+          "dummy-last":""
+        },
+
+
+      "optional-dropdowns":
+        {
+          "dummy-first":"",
+
+          "page-type":"dropdowns",
+          "title":"Wizard Optional Dropdown Combobox Test",
+          "subtitle":"Select value in taken dropdown list",
+
+          "next-page":"test-page3",
+
+          "dropdowns-width":"/3",
+          "dropdowns":
+            [
+                { "title":"Select value",
+                  "target-value":"optional-dropdown-res",
+                  "target-value-title":"Optional Dropdown Value",
+                  "values":
+                    [
+                      { "value":"dropdown-optional-val-1"   },
+                      { "value":"dropdown-optional-val-2"   }
+                    ]
+                }
+            ],
+
+          "dummy-last":""
+        },
+
+
+      "test-page3":
+        {
+          "dummy-first":"",
+          "page-type":"info",
+          "title":"Test Page number three",
+          "subtitle":"Test Page number three subtitle",
+          "description":"This is a simple page number 3",
+
+          "next-page":"summary",
+
+          "dummy-last":""
+        },
+
+      "summary":
+        {
+          "dummy-first":"",
+          "title":"Pumba Wizardry Test Summary",
+          "page-type":"summary",
+          "subtitle":"Please check the options collected during walking through the wizard",
+
+          "dummy-last":""
+        }
+
+
+    }
+}
+

@@ -1,0 +1,34 @@
+{
+  "wizard" :
+    { 
+      "geometry":"AUTO",
+      "title":"Pumba Wizardry Logo Test",
+      "icon":"pw.ico",
+      "banner":"",
+      "logo":"pw-logo.png",
+      "image":"pw-img.png",
+      "style":"classic",
+
+      "template":"",
+      "force-single-line":0
+
+    },
+
+  "values":
+    { 
+    },
+
+  "pages" :
+    { 
+
+      "welcome":
+        {
+          "page-type":"welcome",
+          "title":"Welcome!",
+          "subtitle":"Welcome to the Pumba Wizardry Logo Test wizard",
+          "description":"This wizard shows ability to use Pumba Wizardry custom images"
+        }
+
+    }
+}
+

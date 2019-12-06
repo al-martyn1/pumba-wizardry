@@ -1,0 +1,59 @@
+{
+  "wizard" :
+    { 
+      "dummy-first":"",
+
+      "geometry":"600",
+      "title":"RDLC Wizard",
+      "icon":"rdlc2.ico",
+      "banner":"",
+      "logo":"img/rdlc2_48_notxt.png",
+      "image":"img/rdlc2_tall_3.png",
+      "style":"classic",
+
+      "dummy-last":""
+    },
+
+  "types":
+    { 
+      "test-page1":
+        {
+          "dummy-first":"",
+          "dummy-last":""
+        }
+    },
+
+  "pages" :
+    { 
+      "welcome":
+        {
+          "dummy-first":"",
+          "title":"Welcome!",
+          "subtitle":"Welcome to the RDLC wizard",
+          "description":"This wizard helps your to go through the rest of all RDLC comand line options\n\nSome string\n\nSome other",
+          "next-page":"test-page2",
+          "dummy-last":""
+        },
+
+      "test-page1":
+        {
+          "dummy-first":"",
+          "title":"Test Page 1",
+          "subtitle":"Test Page 1 subtitle",
+          "description":"This is a simple page number one",
+          "dummy-last":""
+        },
+
+      "test-page2":
+        {
+          "dummy-first":"",
+          "title":"Test Page 2",
+          "subtitle":"Test Page 2 subtitle",
+          "description":"This is a simple page number two",
+          "next-page":"test-page1",
+          "dummy-last":""
+        }
+
+    }
+}
+

@@ -1,0 +1,1 @@
+call wizards\tests\test-logo.bat -v

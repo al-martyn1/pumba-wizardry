@@ -1,0 +1,111 @@
+{
+  "wizard" :
+    { 
+      "dummy-first":"",
+
+      "geometry":"600",
+      "title":"RDLC Wizard",
+      "icon":"../rdlc-wizard/rdlc.ico",
+      "banner":"",
+      "logo":"../rdlc-wizard/rdlc_logo.png",
+      "image":"../rdlc-wizard/rdlc_img.png",
+      "style":"classic",
+
+      "dummy-last":""
+    },
+
+  "values":
+    { 
+      "radio-choise-1":
+        {
+          "title":"Radio button 1",
+          "description":"Description of radiobutton #1"
+        },
+      "radio-choise-2":
+        {
+          "title":"Radio button 2",
+          "description":"Description of radiobutton #2"
+        },
+      "radio-choise-3":
+        {
+          "title":"Radio button 3",
+          "description":"Description of radiobutton #3"
+        },
+      "welcome":
+        {
+          "title":"Welcome",
+          "description":"Loop to welcome page"
+        }
+    },
+
+  "types":
+    { 
+      "test-page1":
+        {
+          "dummy-first":"",
+          "dummy-last":""
+        }
+    },
+
+  "pages" :
+    { 
+      "welcome":
+        {
+          "dummy-first":"",
+          "page-type":"welcome",
+          "title":"Welcome!",
+          "subtitle":"Welcome to the RDLC wizard",
+          "description":"This wizard helps your to go through the rest of all RDLC comand line options\n\nSome string\n\nSome other",
+          "next-page":"test-page2",
+          "dummy-last":""
+        },
+
+      "test-page1":
+        {
+          "dummy-first":"",
+          "title":"Test Page 1",
+          "subtitle":"Test Page 1 subtitle",
+          "description":"This is a simple page number one",
+
+          "target-value":"radio-val1",
+          "page-type":"radio-choice",
+
+          "dummy-last":""
+        },
+
+      "test-page2":
+        {
+          "dummy-first":"",
+          
+          "title":"Test Page 2",
+          "subtitle":"Test Page 2 subtitle",
+          "description":"This is a simple page number two",
+
+          "next-page":"test-page1",
+
+          "target-value":"radio-val1",
+          "page-type":"radio-choice",
+
+          "radio-choice":
+            [
+              { "value":"radio-choise-1"   },
+              { "value":"radio-choise-2"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"radio-choise-3"   },
+              { "value":"welcome", "next-page":"welcome" }
+            ],
+
+          "dummy-last":""
+        }
+
+    }
+}
+

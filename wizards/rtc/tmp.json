@@ -1,0 +1,14 @@
+{
+  "rtc": 
+    {
+      "name": "rtc",
+      "path": "F:\\_rtc\\wizardry\\wizards\\rtc",
+      "wizards": {}
+    },
+  "tests":
+    {
+      "name": "tests",
+      "path": "F:\\_rtc\\wizardry\\wizards\\tests",
+      "wizards": {}
+    }
+}

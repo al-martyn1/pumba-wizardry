@@ -1,0 +1,34 @@
+{
+  "wizard" :
+    { 
+      "geometry":"AUTO",
+      "title":"Pumba Wizardry Super Pumba Super Wizard",
+      "icon":"pw.ico",
+      "banner":"",
+      "logo":"pw-logo.png",
+      "image":"pw-img.png",
+      "style":"classic"
+    },
+
+  "pages" :
+    { 
+
+      "welcome":
+        {
+          "page-type":"welcome",
+          "title":"Welcome!",
+          "subtitle":"Welcome to the Pumba Wizardry Super Pumba Super Wizard",
+          "description":"This Super Wizard helps your to choose specific wizard in your subject area"
+        },
+
+      "summary":
+        {
+          "title":"Super Pumba Super Wizard Summary",
+          "page-type":"summary",
+          "subtitle":"Please check the options collected during walking through the wizard"
+        }
+
+    }
+
+}
+

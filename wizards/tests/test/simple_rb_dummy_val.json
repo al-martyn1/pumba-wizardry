@@ -1,0 +1,137 @@
+{
+  "wizard" :
+    { 
+      "dummy-first":"",
+
+      "geometry":"600",
+      "title":"RDLC Wizard",
+      "icon":"../rdlc-wizard/rdlc.ico",
+      "banner":"",
+      "logo":"../rdlc-wizard/rdlc_logo.png",
+      "image":"../rdlc-wizard/rdlc_img.png",
+      "style":"classic",
+
+      "dummy-last":""
+    },
+
+  "values":
+    { 
+      "go-to-summary":
+        {
+          "title":"Go to summary",
+          "long-title":"Go to summary page (skip all other pagess)",
+          "description":"Go to summary page (skip all other pagess)"
+        },
+
+      "radio-choise-1":
+        {
+          "title":"Radio button 1",
+          "description":"Description of radiobutton #1"
+        },
+      "radio-choise-2":
+        {
+          "title":"Radio button 2",
+          "description":"Description of radiobutton #2"
+        },
+      "radio-choise-3":
+        {
+          "title":"Radio button 3",
+          "description":"Description of radiobutton #3"
+        },
+      "welcome":
+        {
+          "title":"Welcome",
+          "description":"Loop to welcome page"
+        }
+    },
+
+  "types":
+    { 
+      "test-page1":
+        {
+          "dummy-first":"",
+          "dummy-last":""
+        }
+    },
+
+  "pages" :
+    { 
+      "welcome":
+        {
+          "dummy-first":"",
+          "page-type":"welcome",
+          "title":"Welcome!",
+          "subtitle":"Welcome to the RDLC wizard",
+          "description":"This wizard helps your to go through the rest of all RDLC comand line options\n\nSome string\n\nSome other",
+          "next-page":"radiobuttons-test",
+          "dummy-last":""
+        },
+
+      "radiobuttons-test":
+        {
+          "dummy-first":"",
+          
+          "title":"Test Page 2",
+          "subtitle":"Test Page 2 subtitle",
+          "description":"This is a simple page number two",
+
+          "next-page":"test-page1",
+
+          "target-value":"radiobuttons-test",
+          "target-value-title":"Radiobuttons test",
+
+          "page-type":"radio-choice",
+          "default-choice":"radio-choise-3",
+          "radio-choice":
+            [
+              { "value":"radio-choise-1"   },
+              { "value":"radio-choise-2", "default":1  },
+              { "value":"radio-choise-3"   },
+              { "value":"go-to-summary", "next-page":"summary" }
+            ],
+
+          "dummy-last":""
+        },
+
+
+      "test-page1":
+        {
+          "dummy-first":"",
+          "page-type":"info",
+          "title":"Test Page 1",
+          "subtitle":"Test Page 1 subtitle",
+          "description":"This is a simple page number one",
+
+          "next-page":"test-page3",
+
+          "dummy-last":""
+        },
+
+
+      "test-page3":
+        {
+          "dummy-first":"",
+          "page-type":"info",
+          "title":"Test Page number three",
+          "subtitle":"Test Page number three subtitle",
+          "description":"This is a simple page number 3",
+
+          "next-page":"summary",
+
+          "dummy-last":""
+        },
+
+      "summary":
+        {
+          "dummy-first":"",
+          "page-type":"summary",
+          "title":"RDLC Wizard Summary",
+          "subtitle":"Options collected during walk through wizard",
+
+          "dummy-last":""
+        }
+
+
+    }
+}
+
