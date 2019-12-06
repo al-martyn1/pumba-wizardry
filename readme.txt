@@ -70,7 +70,7 @@ Installation:
 
    Run:
 
-       "git clone git@github.com:whatever PW-FOLDER-NAME"
+       "git clone https://github.com/al-martyn1/pumba-wizardry.git PW-FOLDER-NAME"
 
        where "PW-FOLDER-NAME" is the folder where you want to install
            "Pumba Wizardry", e.g. "D:\PumbaWizardry", "D:\pumba_wizardry" or
@@ -84,7 +84,7 @@ Installation:
        to get access to "Pumba Wizardry Super Pumba Super Wizard" from whatever.
 
 
-4) Install or create your "Pumba Wizardry" powered wizards
+4) Install or create your "Pumba Wizardry"-powered wizards
 
    "Pumba Wizardry" wizard library organized into two level hierachy:
        wizard's family folder and separate wizard folders under wizard family folder.
