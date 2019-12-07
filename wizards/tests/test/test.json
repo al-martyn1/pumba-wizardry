@@ -65,8 +65,47 @@
         {
           "title":"Second value",
           "description":"Second value description"
-        }
+        },
 
+      "edit-val-1":
+        {
+          "title":"Edit control test 1",
+          "description":"Edit control test 1 description"
+        },
+      "edit-val-2":
+        {
+          "title":"Edit control test 2",
+          "description":"Edit control test 2 description"
+        },
+      "edit-val-3":
+        {
+          "title":"Edit control test 3",
+          "description":"Edit control test 3 description"
+        },
+      "edit-val-phone-1":
+        {
+          "title":"Phone number #1"
+        },
+      "edit-val-phone-2":
+        {
+          "title":"Phone number #2"
+        },
+      "edit-val-phone-3":
+        {
+          "title":"Phone number #3"
+        },
+      "password1":
+        {
+          "title":"Password"
+        },
+      "password2":
+        {
+          "title":"Password"
+        },
+      "password3":
+        {
+          "title":"Password"
+        }
 
     },
 
@@ -85,22 +124,79 @@
 
       "welcome":
         {
-          "dummy-first":"",
-
           "page-type":"welcome",
           "title":"Welcome!",
           "subtitle":"Welcome to the Pumba Wizardry Test wizard",
           "description":"This wizard helps your to go through the rest of all Pumba Wizardry Test and sample pages",
 
-          "next-page":"listsinglesel-test",
+          "next-page":"edit-test",
 
           "dummy-last":""
         },
 
+      "edit-test":
+        {
+          "page-type":"editfields",
+          "title":"Wizard Edit Test",
+          "subtitle":"Edit controls test",
+          "description":"Enter value into each edit control",
+
+          "next-page":"listsinglesel-test",
+
+          "controls-width":"/2",
+          "editfields":
+            [
+                { "title":"Edit 1",
+                  "target-value":"edit-val-1",
+                  "target-value-title":"Overrided target value title",
+                  "default":"Text1"
+                },
+
+                { 
+                  "target-value":"edit-val-2",
+                  "input-mask":""
+                },
+
+                { "title":"Edit 3",
+                  "target-value":"edit-val-3"
+                },
+
+                { "target-value":"edit-val-phone-1",
+                  "default":"+1 (123) 456-78-90"
+                },
+
+                { "target-value":"edit-val-phone-2",
+                  "placeholder":"+1 (123) 456-78-90"
+                },
+
+                { "target-value":"edit-val-phone-3",
+                  "placeholder":"+1 (123) 456-78-90",
+                  "mask":"+D (DDD) DDD-DD-DD;X"
+                },
+
+                { "title":"Mode - password-echo",
+                  "target-value":"password1",
+                  "mode":"password-echo"
+                },
+
+                { "title":"Mode - password",
+                  "target-value":"password2",
+                  "mode":"password"
+                },
+
+                { "title":"Mode - silent",
+                  "target-value":"password3",
+                  "mode":"silent"
+                }
+
+            ],
+
+          "dummy-last":""
+        },
+
+
       "listsinglesel-test":
         {
-          "dummy-first":"",
-          
           "page-type":"listsinglesel",
           "title":"Wizard Single Selection List Test",
           "subtitle":"Single Selection List selection and flow control choice test",
@@ -129,11 +225,9 @@
 
       "dropdowns-test":
         {
-          "dummy-first":"",
-
           "page-type":"dropdowns",
           "title":"Wizard Dropdown Comboboxes Test",
-          "subtitle":"Select value in dropdown list test ",
+          "subtitle":"Select value in dropdown list test",
           "description":"Select value in each dropdown",
 
           "next-page":"radiobuttons-test",
@@ -179,8 +273,6 @@
 
       "radiobuttons-test":
         {
-          "dummy-first":"",
-          
           "page-type":"radio-choice",
           "title":"Wizard Radiobuttons Test",
           "subtitle":"Radiobuttons value selection and flow control choice test",
@@ -207,15 +299,13 @@
 
       "optional-dropdowns":
         {
-          "dummy-first":"",
-
           "page-type":"dropdowns",
           "title":"Wizard Optional Dropdown Combobox Test",
           "subtitle":"Select value in taken dropdown list",
 
           "next-page":"test-page3",
 
-          "dropdowns-width":"/3",
+          "controls-width":"/3",
           "dropdowns":
             [
                 { "title":"Select value",
@@ -235,7 +325,6 @@
 
       "test-page3":
         {
-          "dummy-first":"",
           "page-type":"info",
           "title":"Test Page number three",
           "subtitle":"Test Page number three subtitle",
@@ -248,7 +337,6 @@
 
       "summary":
         {
-          "dummy-first":"",
           "title":"Pumba Wizardry Test Summary",
           "page-type":"summary",
           "subtitle":"Please check the options collected during walking through the wizard",

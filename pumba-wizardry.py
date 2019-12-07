@@ -179,11 +179,25 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
                 #wizResultTitles[ self.config['target-value'] ] = self.config['target-value-title']
 
 
+    #-----
+
     def setTargetValueTitle( self, targetValueName, targetValueTitle ) :
 
         global wizResultTitles  # = {}
         wizResultTitles[ targetValueName ] = targetValueTitle
 
+
+    #-----
+
+    def pushResultOrderInfo( self, targetValueName ) :
+
+        global wizResultOrder   # = []
+
+        if targetValueName not in wizResultOrder :
+            wizResultOrder.append( targetValueName )
+
+
+    #-----
 
     def pushResultOrderInfoPageName( self ) :
 
@@ -201,13 +215,65 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
             wizResultOrder.append( '*' + self.page_type )
 
 
-    def pushResultOrderInfo( self, targetValueName ) :
+    #-----
 
-        global wizResultOrder   # = []
+    def checkCorrectVerticalInterval( self, interval, verticalItemsNumber ) :
 
-        if targetValueName not in wizResultOrder :
-            wizResultOrder.append( targetValueName )
+        wizHeight = self.wizardWnd.height()
 
+        if wizHeight < 400 :
+            interval = interval - 1
+            if len(verticalItemsNumber) > 3 :
+                interval = interval - 1
+
+        if interval < 0 :
+            interval = 0
+
+        return interval
+
+
+    #-----
+
+    def calcVerticalInterval( self, singleLineControl, verticalItemsNumber ) :
+
+        interval  = 0
+
+        if singleLineControl==True :
+
+            # rb
+            if verticalItemsNumber <= 2 :
+                interval = 3
+            if verticalItemsNumber <= 4 :
+                interval = 2
+            elif verticalItemsNumber <= 6 :
+                interval = 1
+            else : # if radioChoicesSize <= 12 :
+                interval = 0
+
+        else :
+
+            # cb
+            if verticalItemsNumber <= 2 :
+                interval = 3
+            if verticalItemsNumber <= 3 :
+                interval = 2
+            elif verticalItemsNumber <= 4 :
+                interval = 1
+            else :
+                interval = 0
+
+
+        wizHeight = self.wizardWnd.height()
+
+        if wizHeight < 400 :
+            interval = interval - 1
+            if verticalItemsNumber > 3 :
+                interval = interval - 1
+
+        if interval < 0 :
+            interval = 0
+
+        return interval
 
 
     #-----
@@ -295,7 +361,6 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
             if targetValue in wizResultValues :
                 del wizResultValues[targetValue]
 
-
     #-----
 
     def nextId( self ) :
@@ -323,20 +388,7 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
         return int(nextPageId)
 
 
-    def checkCorrectVerticalInterval( self, interval, verticalItemsNumber ) :
-
-        wizHeight = self.wizardWnd.height()
-
-        if wizHeight < 400 :
-            interval = interval - 1
-            if len(verticalItemsNumber) > 3 :
-                interval = interval - 1
-
-        if interval < 0 :
-            interval = 0
-
-        return interval
-
+    #-----
 
     def getNumberOfFooterLines( self ) :
 
@@ -350,21 +402,29 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
             return 4
 
 
+    #-----
+
     def addVerticalSpacing( self, n ) :
         for i in range(n) :
             dummySpaceLabel  = QtWidgets.QLabel()
             self.layout.addWidget(dummySpaceLabel)
 
 
+    #-----
+
     def addFooterLines( self ) :
         self.addVerticalSpacing(self.getNumberOfFooterLines())
 
+
+    #-----
 
     def checkAddExtraVerticalSpacing( self, itemNumber, numberOfRegularIntervals ) :
         if itemNumber==0 and numberOfRegularIntervals==0 :
             dummySpaceLabel  = QtWidgets.QLabel()
             self.layout.addWidget(dummySpaceLabel)
 
+
+    #-----
 
     def scaleControlSize( self, sz, scale, minSize = 200 ) :
 
@@ -391,6 +451,8 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
         return int( sz + float(0.5) )
 
 
+    #-----
+
     def configureControlWidth( self, widget, width ) :
 
         if width > 0 :
@@ -404,24 +466,6 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
             minSize = widget.minimumSizeHint()
             minSize.setWidth(width)
             widget.setMinimumSize(minSize)
-
-
-
-'''
-        if controlsWidth!=0 :
-
-            #dropdown.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLengthWithIcon)
-
-            sizePolicy = listWidget.sizePolicy()
-            sizePolicy.setHorizontalPolicy(QtWidgets.QSizePolicy.MinimumExpanding)
-            listWidget.setSizePolicy(sizePolicy)
-
-            minSize = listWidget.minimumSizeHint()
-            minSize.setWidth(controlsWidth)
-            listWidget.setMinimumSize(minSize)
-
-            pass
-'''
 
 
 
@@ -441,18 +485,8 @@ class PumbaWizardPageRadioChoice(PumbaWizardPageBase):
         
         radioChoices = config['radio-choice']
         radioChoicesSize = len(radioChoices)
-        doVertIntervals  = 0
 
-        if radioChoicesSize <= 2 :
-            doVertIntervals = 3
-        if radioChoicesSize <= 4 :
-            doVertIntervals = 2
-        elif radioChoicesSize <= 6 :
-            doVertIntervals = 1
-        else : # if radioChoicesSize <= 12 :
-            doVertIntervals = 0
-
-        doVertIntervals = self.checkCorrectVerticalInterval( doVertIntervals, radioChoicesSize )
+        doVertIntervals = self.calcVerticalInterval( True, radioChoicesSize )
 
         rbNumber = 0
 
@@ -495,11 +529,6 @@ class PumbaWizardPageRadioChoice(PumbaWizardPageBase):
             
             self.addVerticalSpacing(doVertIntervals)
 
-            '''
-            if rbNumber==0 and doVertIntervals==0 :
-                dummySpaceLabel  = QtWidgets.QLabel()
-                self.layout.addWidget(dummySpaceLabel)
-            '''
 
             self.layout.addWidget(radiobutton)
             radiobutton.setText( radioTitle )
@@ -517,11 +546,6 @@ class PumbaWizardPageRadioChoice(PumbaWizardPageBase):
 
             rbNumber = rbNumber + 1
 
-        '''
-        for i in range(doVertIntervals) :
-            dummySpaceLabel  = QtWidgets.QLabel()
-            self.layout.addWidget(dummySpaceLabel)
-        '''
         self.addVerticalSpacing(doVertIntervals)
 
         if 'default-choice' not in self.config and radioChoicesSize > 0:
@@ -556,10 +580,6 @@ class PumbaWizardPageRadioChoice(PumbaWizardPageBase):
             self.clearTargetValue()
 
         pass
-
-
-        
-
 
 
 
@@ -687,20 +707,14 @@ class PumbaWizardPageListSingleSel(PumbaWizardPageBase):
             self.onLisSelectionChanged()
 
         self.listWidget.itemSelectionChanged.connect( self.onLisSelectionChanged )
-        #self.listWidget.toggled.connect( lambda rbValue, n=valueName, i=rbNumber : self.onRadioButtonToggled( n , i, rbValue ) )
-#void QListWidget::currentItemChanged(QListWidgetItem * current, QListWidgetItem * previous)
-
-        #self.config['radiobutton-widgets'][ self.config['default-choice'] ].setChecked(True)
 
 
 
     #-----
 
-    #def onRadioButtonToggled( self, name, idx, rbValue ) :
     def onLisSelectionChanged( self ) :
 
         #self.simpleMessage('Selection changed')
-
         #print( 'Selection changed' )
 
         sz = len(self.listWidgetItems)
@@ -738,53 +752,6 @@ class PumbaWizardPageListSingleSel(PumbaWizardPageBase):
             self.clearTargetValue()
 
 
-            #listWidgetItem = self.listWidgetItems[i]
-
-            #self.simpleMessage( str(i) + ' of ' + str(sz) )
-
-        #radioChoices = self.config['radio-choice']
-        #radioChoicesSize = len(radioChoices)
-
-        #rbNumber = 0
-
-
-        #for i in range(n) :
-        #    dummySpaceLabel  = QtWidgets.QLabel()
-        #rbNumber = 0
-
-        #self.config['radiobutton-widgets'] = {}
-
-        #for radioButtonConfig in radioChoices :
-
-
-        '''
-        if rbValue != True :
-            return None # https://stackoverflow.com/questions/6190776/what-is-the-best-way-to-exit-a-function-which-has-no-return-value-in-python-be
-
-        global wizDynamicNext
-        global wizResultValues
-
-        radioChoices = self.config['radio-choice']
-        radioButtonConfig = radioChoices[idx]
-
-        if 'next-page' in radioButtonConfig :
-            wizDynamicNext[self.page_name] = radioButtonConfig['next-page']
-        elif 'next-page' in self.config :
-            wizDynamicNext[self.page_name] = self.config['next-page']
-
-        #self.setTargetValue( copy.deepcopy(name) )
-        if name!='' :
-            self.setTargetValue( name )
-        else :
-            self.clearTargetValue()
-        '''
-
-        pass
-
-
-        
-
-
 
 
 
@@ -803,18 +770,8 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
         
         dropdownConfigList = config['dropdowns']
         dropdownConfigListSize = len(dropdownConfigList)
-        doVertIntervals  = 0
 
-        if dropdownConfigListSize <= 2 :
-            doVertIntervals = 3
-        if dropdownConfigListSize <= 3 :
-            doVertIntervals = 2
-        elif dropdownConfigListSize <= 4 :
-            doVertIntervals = 1
-        else :
-            doVertIntervals = 0
-
-        doVertIntervals = self.checkCorrectVerticalInterval( doVertIntervals, dropdownConfigListSize )
+        doVertIntervals = self.calcVerticalInterval( False, dropdownConfigListSize )
 
         wizWidgetsWidth = int( self.wizardWnd.getWidgetsAreaWidth() )
 
@@ -822,30 +779,23 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
         if 'controls-width' in config :
             dropdownsWidth = self.scaleControlSize( wizWidgetsWidth, config['controls-width'], 200 )
 
-        '''
-            dropdownsWidth = config['controls-width']
-
-            test = self.scaleControlSize( wizWidgetsWidth, dropdownsWidth )
-
-            if dropdownsWidth.startswith('/') :
-                dropdownsWidth = int(int(wizWidgetsWidth) / int(dropdownsWidth[1:]))
-            else :
-                dropdownsWidth = int(dropdownsWidth)
-
-        if dropdownsWidth!=0 and dropdownsWidth < 200:
-            dropdownsWidth = 200
-
-        '''
-
-
         comboboxNumber = 0
 
         self.config['dropdown-widgets'] = {}
 
         for dropdownConfig in dropdownConfigList :
 
-            title = dropdownConfig['title']
             targetValue = dropdownConfig['target-value']
+
+            title = ''
+            if targetValue in wizConfigValues :
+                title = wizConfigValues[targetValue]['title']
+
+            if 'title' in dropdownConfig :
+                title = dropdownConfig['title']
+
+            #title = dropdownConfig['title']
+            #targetValue = dropdownConfig['target-value']
             
             targetValueTitle = targetValue
             if 'target-value-title' in dropdownConfig :
@@ -914,28 +864,6 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
             self.setTargetValueTitle( targetValue, targetValueTitle )
 
 
-
-
-            '''
-            if 'value' not in radioButtonConfig :
-
-                radioTitle = radioButtonConfig['text']
-
-            else :
-
-                valueName   = radioButtonConfig['value']
-                btnKey      = valueName
-              
-                valueConfig = wizConfigValues[valueName]
-                radioTitle  = valueConfig['title'] # description also must be available
-                if 'long-title' in valueConfig :
-                    radioTitle = valueConfig['long-title']
-
-                if 'default' in radioButtonConfig and ( radioButtonConfig['default']==1 or radioButtonConfig['default']==True ):
-                    config['default-choice'] = btnKey
-              
-            '''        
-
             self.checkAddExtraVerticalSpacing( comboboxNumber, doVertIntervals )
             self.addVerticalSpacing(doVertIntervals)
 
@@ -943,21 +871,6 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
             if dropdownsWidth!=0 :
                 dropdown.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLengthWithIcon)
 
-            '''
-            if dropdownsWidth!=0 :
-
-                dropdown.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLengthWithIcon)
-
-                sizePolicy = dropdown.sizePolicy()
-                sizePolicy.setHorizontalPolicy(QtWidgets.QSizePolicy.MinimumExpanding)
-                dropdown.setSizePolicy(sizePolicy)
-
-                minSize = dropdown.minimumSizeHint()
-                minSize.setWidth(dropdownsWidth)
-                dropdown.setMinimumSize(minSize)
-
-                pass
-            '''
 
             dropdownLabel  = QtWidgets.QLabel( title + ':')
             self.layout.addWidget(dropdownLabel )
@@ -970,22 +883,11 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
 
             comboboxNumber = comboboxNumber + 1
 
-        '''
-        for i in range(doVertIntervals) :
-            dummySpaceLabel  = QtWidgets.QLabel()
-            self.layout.addWidget(dummySpaceLabel)
-        '''
         self.addVerticalSpacing(doVertIntervals)
 
-        '''
-        if 'default-choice' not in self.config and radioChoicesSize > 0:
-                self.config['default-choice'] = radioChoices[0]['value']
 
-        self.config['radiobutton-widgets'][ self.config['default-choice'] ].setChecked(True)
-        '''
 
-    #https://doc.qt.io/qt-5/qcombobox.html#currentIndex-prop
-    #connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index){ /* ... */ });
+
 
     def onComboboxIndexChanged( self, comboboxSelectionIdx, comboboxId, targetValueNameArg ) :
 
@@ -1002,15 +904,166 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
         valueInfo = dropdownValues[comboboxSelectionIdx]
         valueInfo['value']
 
-        '''
-        if 'next-page' in radioButtonConfig :
-            wizDynamicNext[self.page_name] = radioButtonConfig['next-page']
-        elif 'next-page' in self.config :
-            wizDynamicNext[self.page_name] = self.config['next-page']
-        '''
         #def setTargetValue( self, value, targetValue = None ) :
         self.setTargetValue( valueInfo['value'], targetValueName )
 
+       
+
+
+
+
+
+
+
+#--------------------------------------------------
+class PumbaWizardPageEdits(PumbaWizardPageBase):
+
+    #-----
+
+    def __init__(self, parent, config):
+        PumbaWizardPageBase.__init__(self, parent, config)
+
+        global wizConfigValues  # = {}
+        global wizResultValues  # = {}
+        
+        controlsConfigList     = config['editfields']
+        controlsConfigListSize = len(controlsConfigList)
+
+
+        doVertIntervals = self.calcVerticalInterval( False, controlsConfigListSize )
+
+        wizWidgetsWidth = int( self.wizardWnd.getWidgetsAreaWidth() )
+
+        controlsWidth = 0
+        if 'controls-width' in config :
+            controlsWidth = self.scaleControlSize( wizWidgetsWidth, config['controls-width'], 200 )
+
+
+        controlNumber = 0
+
+        self.config['edit-widgets'] = {}
+
+        for controlConfig in controlsConfigList :
+
+            targetValue = controlConfig['target-value']
+
+            title = ''
+            if targetValue in wizConfigValues :
+                title = wizConfigValues[targetValue]['title']
+
+            if 'title' in controlConfig :
+                title = controlConfig['title']
+            
+            targetValueTitle = targetValue
+            if 'target-value-title' in controlConfig :
+                targetValueTitle = controlConfig['target-value-title']
+
+
+            ctrl = QtWidgets.QLineEdit( )
+
+            #https://doc.qt.io/qt-5/qtwidgets-widgets-lineedits-example.html
+
+            if 'default' in controlConfig and controlConfig['default']!=None and controlConfig['default']!='' :
+                defText = controlConfig['default']
+                ctrl.setText(defText)
+                # Hm. textChanged signal not emited yet
+                # do it manually
+                self.onTextChanged( defText, targetValue ) :
+
+            if 'placeholder' in controlConfig and controlConfig['placeholder']!=None and controlConfig['placeholder']!='' :
+                ctrl.setPlaceholderText(controlConfig['placeholder'])
+
+            #https://doc.qt.io/qt-5/qlineedit.html#inputMask-prop
+            if 'mask' in controlConfig and controlConfig['mask']!=None and controlConfig['mask']!='' :
+                ctrl.setInputMask(controlConfig['mask'])
+
+            if 'max-len' in controlConfig and controlConfig['max-len']!=None and controlConfig['max-len']!='' :
+                ctrl.setMaxLength(controlConfig['max-len'])
+            elif 'max-length' in controlConfig and controlConfig['max-length']!=None and controlConfig['max-length']!='' :
+                ctrl.setMaxLength(controlConfig['max-length'])
+
+
+            #https://doc.qt.io/qt-5/qlineedit.html#EchoMode-enum
+            if 'mode' in controlConfig :
+                editEchoModeStr = controlConfig['mode']
+                if editEchoModeStr=='normal' :
+                    ctrl.setEchoMode( ctrl.Normal )
+                elif editEchoModeStr=='silent' :
+                    ctrl.setEchoMode( ctrl.NoEcho )
+                elif editEchoModeStr=='password' :
+                    ctrl.setEchoMode( ctrl.Password )
+                elif editEchoModeStr=='password-echo' :
+                    ctrl.setEchoMode( ctrl.PasswordEchoOnEdit )
+                else :
+                    raise ValueError('Invalid edit control mode: ' + editEchoModeStr)
+
+
+            if isVeboseMode() :
+                print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
+
+
+            self.pushResultOrderInfo( targetValue )
+            self.setTargetValueTitle( targetValue, targetValueTitle )
+
+            self.checkAddExtraVerticalSpacing( controlNumber, doVertIntervals )
+            self.addVerticalSpacing(doVertIntervals)
+
+            self.configureControlWidth(ctrl,controlsWidth)
+            #if controlsWidth!=0 :
+            #    ctrl.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLengthWithIcon)
+
+            if isVeboseMode() :
+                print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
+            
+
+
+            ctrlLabel  = QtWidgets.QLabel( title + ':')
+            self.layout.addWidget(ctrlLabel)
+
+            if controlsWidth!=0 :
+                self.layout.addWidget( ctrl, 0, QtCore.Qt.AlignLeft)
+            else :
+                self.layout.addWidget( ctrl)
+
+            if isVeboseMode() :
+                print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
+
+
+            #self.config['dropdown-widgets'][ dropdownKey ] = dropdown
+
+            #void QLineEdit::textEdited(const QString &text) # only if edited by user
+            #void QLineEdit::textChanged(const QString &text # also if changed programmaticaly
+            #ctrl.textChanged.connect( self.onTextChanged )
+
+            ctrl.textChanged.connect( lambda ctrlText, varName=targetValue : self.onTextChanged( ctrlText, varName ) )
+            #ctrl.textEdited.connect( lambda ctrlText, varName=targetValue : self.onTextChanged( ctrlText, varName ) )
+
+            controlNumber = controlNumber + 1
+
+        self.addVerticalSpacing(doVertIntervals)
+
+
+    def onTextChanged( self, ctrlText, varName ) :
+        self.simpleMessage('Text changed for var ' + varName + ': ' + ctrlText )
+
+        #print( 'Selection changed' )
+        pass
+
+    '''
+    def onComboboxIndexChanged( self, comboboxSelectionIdx, comboboxId, targetValueNameArg ) :
+
+        global wizDynamicNext
+        global wizResultValues
+
+        dropdownConfigList = self.config['dropdowns']
+        dropdownConfig  = dropdownConfigList[comboboxId]
+        dropdownValues  = dropdownConfig['values']
+        targetValueName = dropdownConfig['target-value']
+        valueInfo = dropdownValues[comboboxSelectionIdx]
+        valueInfo['value']
+
+        self.setTargetValue( valueInfo['value'], targetValueName )
+    '''
 
 
 
@@ -1155,6 +1208,9 @@ def createWizardPage( parent, config ) :
 
     elif pageType=='listsinglesel' : 
         return PumbaWizardPageListSingleSel(parent, config)
+
+    elif pageType=='editfields' : 
+        return PumbaWizardPageEdits(parent, config)
 
     raise ValueError( 'Unknown page type - \'' + pageType + '\'' )
 
