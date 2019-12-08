@@ -101,6 +101,6 @@ Installation:
 
 5) Enjoy with "Pumba Wizardry"!
 
-   Run "PW/super-pumba/super-pumba.bat" to list all of wizards and select apropriate one.
+   Run "PW/super-pumba/super-pumba.bat" to list all of the wizards and select apropriate one.
 
    Run "PW/wizards/FAMILY/WIZARD.bat" to run the exact wizard.
