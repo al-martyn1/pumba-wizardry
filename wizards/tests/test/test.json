@@ -11,7 +11,9 @@
       "image":"pw-img.png",
       "style":"classic",
 
-      "template":"",
+      "template":"$template-file",
+      "output"  :"$output-file",
+
       "force-single-line":0,
 
       "dummy-last":""
@@ -158,36 +160,26 @@
 
           "controls-width":"/2",
 
-          "values":
-            {
-              "comment":"section not processed. List of target vars for file names"
-              "input-file": "",
-              "output-file": "",
-              "template-file": "",
-            }
-
           "fileselections":
             [
-                { "title":"Edit 1",
-                  "target-value":"edit-val-1",
-                  "target-value-title":"Overrided target value title",
-                  "default":"Text1"
+                { "target-value":"input-file",
+                  "default":"test.txt",
+                  "options":"open-existing,readonly-edit,native"
                 },
 
-                { 
-                  "target-value":"edit-val-2",
+                { "target-value":"output-file",
+                  "options":"confirm-overwrite",
                   "input-mask":""
                 },
 
-                { "title":"Edit 3",
-                  "target-value":"edit-val-3"
+                { "target-value":"template-file",
+                  "options":"open-existing"
                 }
 
             ],
 
           "dummy-last":""
         },
-
 
 
       "edit-test":

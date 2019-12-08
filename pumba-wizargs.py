@@ -27,7 +27,7 @@ class PumbaWizardArgParser :
                                    , action="store_true"
                                    )
     
-        self.argParser.add_argument( "-s", "--style", help="Set wizard window style: classic, modern, mac, aero"
+        self.argParser.add_argument( "-s", "--style", help="Set wizard window style: classic, modern, mac, aero (override config value)"
                                    , type=str
                                    )
     
@@ -43,7 +43,7 @@ class PumbaWizardArgParser :
                                    , type=str
                                    )
     
-        self.argParser.add_argument( "-T", "--title", help="Set wizard window title"
+        self.argParser.add_argument( "-T", "--title", help="Set wizard window title (override config value)"
                                    , type=str
                                    )
     
@@ -56,7 +56,11 @@ class PumbaWizardArgParser :
                                    , help="Add wizard definition jay-son file (.json)"
                                    )
 
-        self.argParser.add_argument( "--template", help="Set name of wizard template file"
+        self.argParser.add_argument( "--template", help="Set name of wizard template file (override config value)"
+                                   , type=str
+                                   )
+    
+        self.argParser.add_argument( "-o", "--output", help="Set name of wizard output file (override config value)"
                                    , type=str
                                    )
     

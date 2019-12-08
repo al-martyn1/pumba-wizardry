@@ -70,6 +70,9 @@ wizResourcesPath         = '' # F:\_rtc\wizardry\wizards\tests\test
 wizardsRoot              = os.path.join( scriptRealPathNorm, 'wizards' )
 
 
+defOpenFileDialogPath    = ''
+
+
 #---------
 
 verboseMode      = False
@@ -1104,19 +1107,13 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
 
             ctrl = QtWidgets.QLineEdit( )
 
-            if 'manual-edit' in controlConfig and (controlConfig['manual-edit']=='disable' or controlConfig['manual-edit']=='0' or controlConfig['manual-edit']=='false' or controlConfig['manual-edit']=='False' or controlConfig['manual-edit']=='FALSE') :
-                ctrl.setReadOnly(True)
-            elif 'editable' in controlConfig :
-                editable = controlConfig['manual-edit']
-                if editable==None :
-                    ctrl.setReadOnly(False)
-                elif editable=='true' or editable=='True' or editable=='TRUE' or editable=='1' :
-                    ctrl.setReadOnly(False)
-                elif editable=='false' or editable=='False' or editable=='FALSE' or editable=='0' :
-                    ctrl.setReadOnly(False)
-                else :
-                    raise ValueError("Invalid value " + editable)
 
+            if 'options' in controlConfig :
+                optionsList = controlConfig['options'].split(',')
+                for dlgOption in optionsList :
+                    opt = dlgOption.strip(' ')
+                    if opt=='readonly' or opt=='read-only' or opt=='readonly-edit' or opt=='read-only-edit' :
+                        ctrl.setReadOnly(True)
 
 
             #https://doc.qt.io/qt-5/qtwidgets-widgets-lineedits-example.html
@@ -1159,20 +1156,8 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
             fileSelectBtn.setMaximumSize( int(btnHeight*3/2), btnHeight )
             fileSelectBtn.setMaximumWidth( int(btnHeight*3/2) )
 
-            #hlayout.setStrech( 0, 99 )
-            #hlayout.setStrech( 1,  1 )
 
-            #void QAbstractButton::clicked(bool checked = false)
-            #void QAbstractButton::pressed()
-
-            '''
-            if controlsWidth!=0 :
-                self.layout.addWidget( ctrl, 0, QtCore.Qt.AlignLeft)
-            else :
-                self.layout.addWidget( ctrl )
-            '''
-
-            fileSelectBtn.pressed.connect( lambda editCtrl = ctrl, varName=targetValue, ctrlIndex = controlNumber : self.onTextChanged( editCtrl, varName, ctrlIndex ) )
+            fileSelectBtn.pressed.connect( lambda editCtrl = ctrl, ctrlTitle=title, varName=targetValue, ctrlIndex = controlNumber : self.onButtonPressed( editCtrl, ctrlTitle, varName, ctrlIndex ) )
 
             ctrl.textChanged.connect( lambda ctrlText, varName=targetValue : self.onTextChanged( ctrlText, varName ) )
 
@@ -1183,7 +1168,10 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
 
     #-----
 
-    def onTextChanged( editCtrl, varName, ctrlIndex ) :
+    def onButtonPressed( self, editCtrl, ctrlTitle, varName, ctrlIndex ) :
+
+        global defOpenFileDialogPath
+
         #options = QtWidgets.QFileDialog.Options()
 
         #setOptions(QFileDialog::Options options)
@@ -1193,13 +1181,17 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
         #https://doc.qt.io/qt-5/qfiledialog.html#fileMode-prop
         #setFileMode(QFileDialog::FileMode mode)
 
-        fileDlg = QtWidgets.QFileDialog()
+        #fileDlg = QtWidgets.QFileDialog()
 
-
+        controlsConfigList = self.config['fileselections']
         controlConfig = controlsConfigList[ctrlIndex]
 
-        dlgOptions  = fileDlg.DontUseNativeDialog | fileDlg.DontConfirmOverwrite | fileDlg.DontResolveSymlinks
-        dlgFileMode = fileDlg.AnyFile
+        #dlgOptions  = fileDlg.DontUseNativeDialog | fileDlg.DontConfirmOverwrite | fileDlg.DontResolveSymlinks
+        #dlgFileMode = fileDlg.AnyFile
+        dlgOptions  = QtWidgets.QFileDialog.DontUseNativeDialog | QtWidgets.QFileDialog.DontConfirmOverwrite | QtWidgets.QFileDialog.DontResolveSymlinks
+        dlgFileMode = QtWidgets.QFileDialog.AnyFile
+        #readOnly    = False
+        modeOpen = False
 
         if 'options' in controlConfig :
             
@@ -1212,31 +1204,142 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
                 #https://doc.qt.io/qt-5/qfiledialog.html#Option-enum
 
                 if opt=='native' : # if 'native' option gotten, reset DontUseNativeDialog flags
-                    dlgOptions = dlgOptions & ~ fileDlg.DontUseNativeDialog
+                    dlgOptions = dlgOptions & ~ QtWidgets.QFileDialog.DontUseNativeDialog
 
                 elif opt=='confirm-overwrite' :
-                    dlgOptions = dlgOptions & ~ fileDlg.DontConfirmOverwrite
+                    dlgOptions = dlgOptions & ~ QtWidgets.QFileDialog.DontConfirmOverwrite
             
                 elif opt=='resolve-symlinks' or opt=='symlinks' :
-                    dlgOptions = dlgOptions & ~ fileDlg.DontResolveSymlinks
+                    dlgOptions = dlgOptions & ~ QtWidgets.QFileDialog.DontResolveSymlinks
             
                 elif opt=='dir' :
-                    dlgOptions = dlgOptions | fileDlg.ShowDirsOnly
-                    dlgFileMode = fileDlg.Directory
+                    dlgOptions = dlgOptions | QtWidgets.QFileDialog.ShowDirsOnly
+                    dlgFileMode = QtWidgets.QFileDialog.Directory
             
                 #https://doc.qt.io/qt-5/qfiledialog.html#FileMode-enum
 
                 elif opt=='any' or opt=='open-any' :
-                    dlgFileMode = fileDlg.AnyFile
+                    dlgFileMode = QtWidgets.QFileDialog.AnyFile
+                    modeOpen    = True
             
                 elif opt=='existing' or opt=='open-existing' :
-                    dlgFileMode = fileDlg.ExistingFile
+                    dlgFileMode = QtWidgets.QFileDialog.ExistingFile
+                    modeOpen    = True
+            
+                elif opt=='open' or opt=='open-dialog' :
+                    modeOpen    = True
             
                 elif opt=='list' or opt=='files' :
-                    dlgFileMode = fileDlg.ExistingFiles
+                    dlgFileMode = QtWidgets.QFileDialog.ExistingFiles
+            
+                #elif opt=='readonly' or opt=='read-only' :
+                #    readOnly = True
             
 
+        if dlgFileMode == QtWidgets.QFileDialog.ExistingFiles :
+            raise ValueError('\'list\ mode not supported now')
+
+        fileName = editCtrl.text()
+        filePath = os.path.dirname( os.path.abspath(fileName) )
+
+        if filePath=='' :
+            filePath = defOpenFileDialogPath
+
+
+        fileDlg = QtWidgets.QFileDialog()
+
+
+        if modeOpen==True :
+            fileDlg.setAcceptMode( QtWidgets.QFileDialog.AcceptOpen )
+        else :
+            fileDlg.setAcceptMode( QtWidgets.QFileDialog.AcceptSave )
+
+
+        if 'def-ext' in controlConfig :
+            fileDlg.setDefaultSuffix(controlConfig['def-ext'])
+        elif 'default-ext' in controlConfig :
+            fileDlg.setDefaultSuffix(controlConfig['default-ext'])
+        elif 'default-extention' in controlConfig :
+            fileDlg.setDefaultSuffix(controlConfig['default-extention'])
+
+
+        fileDlg.setFileMode(dlgFileMode)
+        fileDlg.setOptions(dlgOptions)
+
+        curTitle = fileDlg.windowTitle()
+        if curTitle==None or curTitle=='' :
+            if modeOpen==True :
+                curTitle = 'Open'
+            else :
+                curTitle = 'Save As'
+
+
+        if curTitle!=None and curTitle!='' :
+            #curTitle = curTitle + ' ' + ctrlTitle
+            curTitle = ctrlTitle + ' - ' + curTitle
+        else :
+            curTitle = ctrlTitle
+
+        fileDlg.setWindowTitle(curTitle)
+
+
+        if filePath!='' :
+            fileDlg.setDirectory( QtCore.QDir(filePath) )
+
+
+        # https://doc.qt.io/qt-5/qfiledialog.html#setLabelText
+
+
+
+        '''
+        Mask
+        void QFileDialog::setNameFilters(const QStringList &filters)
+
+        QStringList filters;
+        filters << "Image files (*.png *.xpm *.jpg)"
+                << "Text files (*.txt)"
+                << "Any files (*)";
+       
+        QFileDialog dialog(this);
+        dialog.setNameFilters(filters);
+        dialog.exec();
+
+        #fileDlg.setFilter()
+
+        #void QFileDialog::setLabelText(QFileDialog::DialogLabel label, const QString &text)
+
+        #fileName = QtWidgets.QFileDialog.getOpenFileName( self.wizardWnd, ctrlTitle, filePath, "Any *.*", None, )
+
+        #QString QFileDialog::getOpenFileName(QWidget *parent = nullptr, const QString &caption = QString(), const QString &dir = QString(), const QString &filter = QString(), QString *selectedFilter = nullptr, QFileDialog::Options options = Options())
+        #This is a convenience static function that returns an existing file selected by the user. If the user presses Cancel, it returns a null string.
         
+        QStringList files = QFileDialog::getOpenFileNames(
+                        this,
+                        "Select one or more files to open",
+                        "/home",
+                        "Images (*.png *.xpm *.jpg)");
+
+        #setReadOnly
+        '''
+
+        #os.path.dirname( os.path.abspath(scriptFileName) )
+
+        #https://www.programcreek.com/python/example/69297/PyQt4.QtGui.QFileDialog
+        if not fileDlg.exec() :
+            return None
+
+        #QString fileName = dlg.selectedFiles().at(0);
+
+        fileList = fileDlg.selectedFiles()
+        if fileList==None or len(fileList)<1 :
+            return None
+
+        fileName = fileList[0]
+
+        defOpenFileDialogPath = os.path.dirname( os.path.abspath(fileName) )
+
+        editCtrl.setText(fileName)
+        self.onTextChanged( fileName, varName )
 
         pass
 
@@ -1347,32 +1450,11 @@ class PumbaWizardPageSummary(PumbaWizardPageBase):
 
 
 
-'''
-        dropdownsWidth = 0
-        if 'controls-width' in config :
-            dropdownsWidth = config['controls-width']
-            if dropdownsWidth.startswith('/') :
-                dropdownsWidth = int(int(wizWidgetsWidth) / int(dropdownsWidth[1:]))
-            else :
-                dropdownsWidth = int(dropdownsWidth)
-'''
 
 
 
 
-
-
-
-
-
-
-    #-----
-
-
-
-        
-# if 'radio-choice' in config :
-# if self.page_type=='summary' :
+#-----
 
 def createWizardPage( parent, config ) :
 
@@ -1434,6 +1516,7 @@ class PumbaWizard(QtWidgets.QWizard):
         QtWidgets.QWizard.__init__(self, parent)
 
         global wizOptions
+        global cliArgs
 
         self.successCompleted = False
 
@@ -1441,10 +1524,6 @@ class PumbaWizard(QtWidgets.QWizard):
         style       = self.getConfigValue( 'style', cliArgs.style )
         title       = self.getConfigValue( 'title', cliArgs.title, '' )
 
-        # https://docs.makotemplates.org/en/latest/usage.html
-        self.templateFile = self.getConfigValue( 'template', cliArgs.template, wizRcDirName + '.txt' )
-        self.templateFile = os.path.join(wizResourcesPath, self.templateFile )
-        #print( 'template: ', self.templateFile )
 
         self.imageWidth = 0
 
@@ -1571,6 +1650,8 @@ class PumbaWizard(QtWidgets.QWizard):
         global wizResultValues
         global wizardsRoot
         global wizResultValues
+        global cliArgs
+        global wizResourcesPath
 
         self.successCompleted = True
 
@@ -1588,17 +1669,68 @@ class PumbaWizard(QtWidgets.QWizard):
         #wizResultValues  = {}
         #self.simpleMessage('onFinish')
 
+        templateFile = self.getConfigValue( 'template', cliArgs.template, wizRcDirName + '.txt' )
+
+        if templateFile=='-' :
+            return None # nothing to do
+
+        #if len(templateFile)>0 and templateFile[0]=='$' :
+        if templateFile!=None and templateFile.find('$')==0 :
+            # slice - https://www.digitalocean.com/community/tutorials/how-to-index-and-slice-strings-in-python-3
+            templateFile = wizResultValues[templateFile[1:]]
+
+        if templateFile==None or templateFile=='' or templateFile=='-' :
+            return None
+
+        templateFileDir = os.path.dirname( os.path.abspath(templateFile) )
+        if templateFileDir==None or templateFileDir=='' :
+            templateFile = os.path.join(wizResourcesPath, templateFile )
+
+        if isVeboseMode() :
+            print( 'templateFile: ', templateFile )
+
+
+
         # !!!RENDER
-        resTpl = MakoTemplate( filename=self.templateFile)
+        # https://docs.makotemplates.org/en/latest/usage.html
+        resTpl = MakoTemplate( filename=templateFile)
 
         # https://docs.makotemplates.org/en/latest/syntax.html
         renderResult = resTpl.render( wiz=wizResultValues )
 
-        print( 'Template rendering result:' )
-        print( renderResult )
+
+        outputFile = self.getConfigValue( 'output', cliArgs.output, None )
+
+        if outputFile=='-' :
+            print( 'Template rendering result:' )
+            print( renderResult )
+            return None # nothing to do
+
+        #if len(templateFile)>0 and templateFile[0]=='$' :
+        if outputFile!=None and outputFile.find('$')==0 :
+            # slice - https://www.digitalocean.com/community/tutorials/how-to-index-and-slice-strings-in-python-3
+            outputFile = wizResultValues[outputFile[1:]]
+
+        if outputFile==None or outputFile=='' or outputFile=='-' :
+            print( 'Template rendering result:' )
+            print( renderResult )
+            return None
+
+
+        if isVeboseMode() :
+            print( 'outputFile  : ', outputFile )
+
+
+        with open( outputFile, 'w') as outputFileHandle:
+            outputFileHandle.write(renderResult)
 
         pass
     
+
+        
+
+
+
 
 #--------------------------------------------------
 # https://docs.python.org/3/tutorial/datastructures.html
