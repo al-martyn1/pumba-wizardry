@@ -1,6 +1,8 @@
 Pumba Wizardry - The wizard engine you've ever dreamed of
 (c) Alexander Martynov (amart on Mail Ru domain)
 
+Vizit http://pumba-wizardry.com for more information
+
 
 Installation:
 
