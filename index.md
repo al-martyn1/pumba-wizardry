@@ -1,6 +1,6 @@
 Pumba Wizardry is a tool for easy creation of the wizards for processes automation.
 
-* Wizardry - term that means workshop for magic (like blacksmith and a smithy, forge or a blacksmith's shop).
+* Wizardry - term that means workshop of the magic (like blacksmith and a smithy, forge or a blacksmith's shop).
 
 Let's automate red tape, bureaucracy and trivial rounds.
 
