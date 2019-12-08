@@ -886,8 +886,7 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
         self.addVerticalSpacing(doVertIntervals)
 
 
-
-
+    #-----
 
     def onComboboxIndexChanged( self, comboboxSelectionIdx, comboboxId, targetValueNameArg ) :
 
@@ -902,7 +901,7 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
         dropdownValues  = dropdownConfig['values']
         targetValueName = dropdownConfig['target-value']
         valueInfo = dropdownValues[comboboxSelectionIdx]
-        valueInfo['value']
+        #valueInfo['value']
 
         #def setTargetValue( self, value, targetValue = None ) :
         self.setTargetValue( valueInfo['value'], targetValueName )
@@ -968,7 +967,7 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
                 ctrl.setText(defText)
                 # Hm. textChanged signal not emited yet
                 # do it manually
-                self.onTextChanged( defText, targetValue ) :
+                self.onTextChanged( defText, targetValue )
 
             if 'placeholder' in controlConfig and controlConfig['placeholder']!=None and controlConfig['placeholder']!='' :
                 ctrl.setPlaceholderText(controlConfig['placeholder'])
@@ -998,8 +997,8 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
                     raise ValueError('Invalid edit control mode: ' + editEchoModeStr)
 
 
-            if isVeboseMode() :
-                print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
+            #if isVeboseMode() :
+            #    print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
 
 
             self.pushResultOrderInfo( targetValue )
@@ -1025,8 +1024,8 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
             else :
                 self.layout.addWidget( ctrl)
 
-            if isVeboseMode() :
-                print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
+            #if isVeboseMode() :
+            #    print( 'Edit \'', title, '\' maxlen: ', ctrl.maxLength(), ', width: ', ctrl.width() )
 
 
             #self.config['dropdown-widgets'][ dropdownKey ] = dropdown
@@ -1043,27 +1042,216 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
         self.addVerticalSpacing(doVertIntervals)
 
 
+    #-----
+
     def onTextChanged( self, ctrlText, varName ) :
-        self.simpleMessage('Text changed for var ' + varName + ': ' + ctrlText )
-
-        #print( 'Selection changed' )
-        pass
-
-    '''
-    def onComboboxIndexChanged( self, comboboxSelectionIdx, comboboxId, targetValueNameArg ) :
 
         global wizDynamicNext
         global wizResultValues
 
-        dropdownConfigList = self.config['dropdowns']
-        dropdownConfig  = dropdownConfigList[comboboxId]
-        dropdownValues  = dropdownConfig['values']
-        targetValueName = dropdownConfig['target-value']
-        valueInfo = dropdownValues[comboboxSelectionIdx]
-        valueInfo['value']
+        self.setTargetValue( ctrlText, varName )
+       
 
-        self.setTargetValue( valueInfo['value'], targetValueName )
-    '''
+
+
+
+
+
+
+#--------------------------------------------------
+class PumbaWizardPageFileselections(PumbaWizardPageBase):
+
+    #-----
+
+    def __init__(self, parent, config):
+        PumbaWizardPageBase.__init__(self, parent, config)
+
+        global wizConfigValues  # = {}
+        global wizResultValues  # = {}
+        
+        controlsConfigList     = config['fileselections']
+        controlsConfigListSize = len(controlsConfigList)
+
+
+        doVertIntervals = self.calcVerticalInterval( False, controlsConfigListSize )
+
+        wizWidgetsWidth = int( self.wizardWnd.getWidgetsAreaWidth() )
+
+        controlsWidth = 0
+        if 'controls-width' in config :
+            controlsWidth = self.scaleControlSize( wizWidgetsWidth, config['controls-width'], 200 )
+
+
+        controlNumber = 0
+
+        self.config['edit-widgets'] = {}
+
+        for controlConfig in controlsConfigList :
+
+            targetValue = controlConfig['target-value']
+
+            title = ''
+            if targetValue in wizConfigValues :
+                title = wizConfigValues[targetValue]['title']
+
+            if 'title' in controlConfig :
+                title = controlConfig['title']
+            
+            targetValueTitle = targetValue
+            if 'target-value-title' in controlConfig :
+                targetValueTitle = controlConfig['target-value-title']
+
+
+            ctrl = QtWidgets.QLineEdit( )
+
+            if 'manual-edit' in controlConfig and (controlConfig['manual-edit']=='disable' or controlConfig['manual-edit']=='0' or controlConfig['manual-edit']=='false' or controlConfig['manual-edit']=='False' or controlConfig['manual-edit']=='FALSE') :
+                ctrl.setReadOnly(True)
+            elif 'editable' in controlConfig :
+                editable = controlConfig['manual-edit']
+                if editable==None :
+                    ctrl.setReadOnly(False)
+                elif editable=='true' or editable=='True' or editable=='TRUE' or editable=='1' :
+                    ctrl.setReadOnly(False)
+                elif editable=='false' or editable=='False' or editable=='FALSE' or editable=='0' :
+                    ctrl.setReadOnly(False)
+                else :
+                    raise ValueError("Invalid value " + editable)
+
+
+
+            #https://doc.qt.io/qt-5/qtwidgets-widgets-lineedits-example.html
+
+            if 'default' in controlConfig and controlConfig['default']!=None and controlConfig['default']!='' :
+                defText = controlConfig['default']
+                ctrl.setText(defText)
+                # Hm. textChanged signal not emited yet
+                # do it manually
+                self.onTextChanged( defText, targetValue )
+
+
+            self.pushResultOrderInfo( targetValue )
+            self.setTargetValueTitle( targetValue, targetValueTitle )
+
+            self.checkAddExtraVerticalSpacing( controlNumber, doVertIntervals )
+            self.addVerticalSpacing(doVertIntervals)
+
+            self.configureControlWidth(ctrl,controlsWidth)
+            #if controlsWidth!=0 :
+            #    ctrl.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToMinimumContentsLengthWithIcon)
+
+            ctrlLabel  = QtWidgets.QLabel( title + ':')
+            self.layout.addWidget(ctrlLabel)
+
+            #https://doc.qt.io/qt-5/qtwidgets-tutorials-widgets-nestedlayouts-example.html
+
+            hlayout = QtWidgets.QHBoxLayout()
+            self.layout.addLayout(hlayout)
+
+            hlayout.addWidget(ctrl, 99) # with strech factor
+
+            fileSelectBtn = QtWidgets.QPushButton('...')
+
+            hlayout.addWidget(fileSelectBtn, 1) # with strech factor
+
+            btnHeight = fileSelectBtn.height()
+            #fileSelectBtn.setWidth( int(btnHeight*3/2) )
+            fileSelectBtn.resize( int(btnHeight*3/2), btnHeight )
+            fileSelectBtn.setMaximumSize( int(btnHeight*3/2), btnHeight )
+            fileSelectBtn.setMaximumWidth( int(btnHeight*3/2) )
+
+            #hlayout.setStrech( 0, 99 )
+            #hlayout.setStrech( 1,  1 )
+
+            #void QAbstractButton::clicked(bool checked = false)
+            #void QAbstractButton::pressed()
+
+            '''
+            if controlsWidth!=0 :
+                self.layout.addWidget( ctrl, 0, QtCore.Qt.AlignLeft)
+            else :
+                self.layout.addWidget( ctrl )
+            '''
+
+            fileSelectBtn.pressed.connect( lambda editCtrl = ctrl, varName=targetValue, ctrlIndex = controlNumber : self.onTextChanged( editCtrl, varName, ctrlIndex ) )
+
+            ctrl.textChanged.connect( lambda ctrlText, varName=targetValue : self.onTextChanged( ctrlText, varName ) )
+
+            controlNumber = controlNumber + 1
+
+        self.addVerticalSpacing(doVertIntervals)
+
+
+    #-----
+
+    def onTextChanged( editCtrl, varName, ctrlIndex ) :
+        #options = QtWidgets.QFileDialog.Options()
+
+        #setOptions(QFileDialog::Options options)
+        #https://doc.qt.io/qt-5/qfiledialog.html#Option-enum
+
+        #https://doc.qt.io/qt-5/qfiledialog.html#FileMode-enum
+        #https://doc.qt.io/qt-5/qfiledialog.html#fileMode-prop
+        #setFileMode(QFileDialog::FileMode mode)
+
+        fileDlg = QtWidgets.QFileDialog()
+
+
+        controlConfig = controlsConfigList[ctrlIndex]
+
+        dlgOptions  = fileDlg.DontUseNativeDialog | fileDlg.DontConfirmOverwrite | fileDlg.DontResolveSymlinks
+        dlgFileMode = fileDlg.AnyFile
+
+        if 'options' in controlConfig :
+            
+            optionsList = controlConfig['options'].split(',')
+
+            for dlgOption in optionsList :
+
+                opt = dlgOption.strip(' ')
+
+                #https://doc.qt.io/qt-5/qfiledialog.html#Option-enum
+
+                if opt=='native' : # if 'native' option gotten, reset DontUseNativeDialog flags
+                    dlgOptions = dlgOptions & ~ fileDlg.DontUseNativeDialog
+
+                elif opt=='confirm-overwrite' :
+                    dlgOptions = dlgOptions & ~ fileDlg.DontConfirmOverwrite
+            
+                elif opt=='resolve-symlinks' or opt=='symlinks' :
+                    dlgOptions = dlgOptions & ~ fileDlg.DontResolveSymlinks
+            
+                elif opt=='dir' :
+                    dlgOptions = dlgOptions | fileDlg.ShowDirsOnly
+                    dlgFileMode = fileDlg.Directory
+            
+                #https://doc.qt.io/qt-5/qfiledialog.html#FileMode-enum
+
+                elif opt=='any' or opt=='open-any' :
+                    dlgFileMode = fileDlg.AnyFile
+            
+                elif opt=='existing' or opt=='open-existing' :
+                    dlgFileMode = fileDlg.ExistingFile
+            
+                elif opt=='list' or opt=='files' :
+                    dlgFileMode = fileDlg.ExistingFiles
+            
+
+        
+
+        pass
+
+
+    #-----
+
+    def onTextChanged( self, ctrlText, varName ) :
+
+        global wizDynamicNext
+        global wizResultValues
+
+        self.setTargetValue( ctrlText, varName )
+
+
+
 
 
 
@@ -1211,6 +1399,9 @@ def createWizardPage( parent, config ) :
 
     elif pageType=='editfields' : 
         return PumbaWizardPageEdits(parent, config)
+
+    elif pageType=='fileselections' : 
+        return PumbaWizardPageFileselections(parent, config)
 
     raise ValueError( 'Unknown page type - \'' + pageType + '\'' )
 

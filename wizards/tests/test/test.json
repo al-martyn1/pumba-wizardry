@@ -105,6 +105,19 @@
       "password3":
         {
           "title":"Password"
+        },
+
+      "input-file":
+        {
+          "title":"Input file"
+        },
+      "output-file":
+        {
+          "title":"Output file"
+        },
+      "template-file":
+        {
+          "title":"Template file"
         }
 
     },
@@ -129,10 +142,53 @@
           "subtitle":"Welcome to the Pumba Wizardry Test wizard",
           "description":"This wizard helps your to go through the rest of all Pumba Wizardry Test and sample pages",
 
-          "next-page":"edit-test",
+          "next-page":"fileselection-test",
 
           "dummy-last":""
         },
+
+      "fileselection-test":
+        {
+          "page-type":"fileselections",
+          "title":"Wizard File Selection",
+          "subtitle":"File Selection controls test",
+          "description":"Select files into each field",
+
+          "next-page":"edit-test",
+
+          "controls-width":"/2",
+
+          "values":
+            {
+              "comment":"section not processed. List of target vars for file names"
+              "input-file": "",
+              "output-file": "",
+              "template-file": "",
+            }
+
+          "fileselections":
+            [
+                { "title":"Edit 1",
+                  "target-value":"edit-val-1",
+                  "target-value-title":"Overrided target value title",
+                  "default":"Text1"
+                },
+
+                { 
+                  "target-value":"edit-val-2",
+                  "input-mask":""
+                },
+
+                { "title":"Edit 3",
+                  "target-value":"edit-val-3"
+                }
+
+            ],
+
+          "dummy-last":""
+        },
+
+
 
       "edit-test":
         {
