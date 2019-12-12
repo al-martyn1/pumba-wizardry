@@ -11,6 +11,8 @@
       "image":"pw-img.png",
       "style":"classic",
 
+      "generate-guids":5,
+
       "template":"$template-file",
       "output"  :"$output-file",
 

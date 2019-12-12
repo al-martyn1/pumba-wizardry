@@ -7,6 +7,7 @@
 import os
 import sys
 import copy
+import uuid
 
 # https://docs.makotemplates.org/en/latest/usage.html
 from mako.template import Template as MakoTemplate
@@ -1517,6 +1518,7 @@ class PumbaWizard(QtWidgets.QWizard):
 
         global wizOptions
         global cliArgs
+        global wizResultValues
 
         self.successCompleted = False
 
@@ -1599,6 +1601,36 @@ class PumbaWizard(QtWidgets.QWizard):
         self.button(self.CancelButton).clicked.connect( self.onCancel )
         self.button(self.FinishButton).clicked.connect( self.onFinish )
         self.currentIdChanged.connect( self.onPageChanged )
+
+        numGuids = self.getConfigValue( 'generate-guids', None, 1 )
+
+        #print('numGuids: ', numGuids)
+        #{E0DE43B5-F08D-4664-A8F2-76EB2ED735DD}
+        # 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+        # 8-4-4-4-12
+
+        #https://docs.python.org/3/library/uuid.html#uuid.uuid1
+        #uuid.RESERVED_MICROSOFT
+
+        for guidN in range(numGuids) :
+            # strWideness = strWideness.lower()
+            guid = str(uuid.uuid4())
+
+            guidVarName = 'guid'+str(guidN)
+            GUIDVarName = 'GUID'+str(guidN)
+            print(guidVarName,': ',guid.lower())
+            print(GUIDVarName,': ',guid.upper())
+
+            wizResultValues[guidVarName] = guid.lower()
+            wizResultValues[GUIDVarName] = guid.upper()
+            
+        wizResultValues['total-guids-generated'] = numGuids
+
+        pass
+        #wizResultValues
+        #generate-guids
+
+
 
 
 
