@@ -21,7 +21,7 @@
 
       "force-single-line":0,
 
-      "show-completion-message":"Job done"
+      "show-completion-message":"Job done",
 
       "dummy-last":""
     },
