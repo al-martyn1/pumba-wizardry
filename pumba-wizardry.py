@@ -1262,7 +1262,7 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
                 #    readOnly = True
             
 
-
+        #https://stackoverflow.com/questions/39676200/pyqt-allowed-enumeration-values-and-strings
         #print('int(dlgOptions): ', int(dlgOptions))
         #print('dlgFileMode: ', dlgFileMode)
 
