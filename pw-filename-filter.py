@@ -32,11 +32,18 @@ class FilenameFilter :
 
         nameMasks = str(filterString).split('-')
 
-        if len(nameMasks)!=2 :
-            raise ValueError('FilenameFilter invalid: ' + str(filterString))
+        self.name  = ''
+        filtersStr = ''
 
-        self.name  = nameMasks[0].strip(' ')
-        filtersStr = nameMasks[1].strip(' ')
+        sz = len(nameMasks)
+        if sz==1 :
+            self.name  = '' #nameMasks[0].strip(' ')
+            filtersStr = nameMasks[0].strip(' ')
+        elif sz==2 :
+            self.name  = nameMasks[0].strip(' ')
+            filtersStr = nameMasks[1].strip(' ')
+        else :
+            raise ValueError('FilenameFilter invalid: ' + str(filterString))
 
         #self.maskList = filtersStr.split(' ')
 
@@ -59,12 +66,20 @@ class FilenameFilter :
 
     def buildQtFilter( self ) :
 
-        qFltStr = self.name + ' ('
-
+        maskList = ''
         for mask in self.maskList :
-            qFltStr = qFltStr + mask + ' '
+            maskList = maskList + mask + ' '
 
-        return qFltStr.strip(' ') + ')'
+        maskList = maskList.strip(' ')
+
+        res = ''
+
+        if self.name==None or self.name=='' :
+            res = maskList
+        else :
+            res = self.name + ' (' + maskList + ')'
+
+        return res
 
 
 
@@ -101,8 +116,8 @@ class FilenameFilterSet :
 
     def findFilter( self, ext ) :
 
-        #if ext[0]!='.' :
-        #    ext = '.' + ext
+        if len(ext)>0 and ext[0]!='.' :
+            ext = '.' + ext
 
         ext = '*' + ext.lower()
 
@@ -143,7 +158,7 @@ if __name__ == '__main__':
     #flt.splitFilter('C/C++ header files - *.h    *.hpp       *.hxx *.h++')
     #flt.print()
 
-    filterSet = FilenameFilterSet('Text files - *.txt; C/C++ files - *.c *.cpp *.cxx *.c++; C/C++ header files - *.h *.hpp *.hxx *.h++; All files - *')
+    filterSet = FilenameFilterSet('Text files - *.txt; C/C++ files - *.c *.cpp *.cxx *.c++; C/C++ header files - *.h *.hpp *.hxx *.h++; *.py *.pyw; All files - *')
 
     qtFilters = filterSet.buildQtFilters()
     print(qtFilters)

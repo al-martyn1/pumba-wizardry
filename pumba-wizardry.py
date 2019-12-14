@@ -42,6 +42,10 @@ import PyQt5.Qt as Qt
 WizSizeMan   = __import__( 'pumba-wizsizeman', [], [], ['WizardSizeManager']    )
 WizArgParser = __import__( 'pumba-wizargs'   , [], [], ['PumbaWizardArgParser'] )
 pwutils      = __import__( 'pw-utils'   , [], [], ['deepupdate'] )
+PwFilenameFilters = __import__( 'pw-filename-filter'   , [], [], ['FilenameFilterSet','FilenameFilter'] )
+
+
+
 
 
 
@@ -1189,10 +1193,23 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
 
         #dlgOptions  = fileDlg.DontUseNativeDialog | fileDlg.DontConfirmOverwrite | fileDlg.DontResolveSymlinks
         #dlgFileMode = fileDlg.AnyFile
+        #dlgOptions = int(0)
+        #dlgFileMode = int(0)
+        # 0x16 = 0x10 | 0x04 | 0x02
         dlgOptions  = QtWidgets.QFileDialog.DontUseNativeDialog | QtWidgets.QFileDialog.DontConfirmOverwrite | QtWidgets.QFileDialog.DontResolveSymlinks
         dlgFileMode = QtWidgets.QFileDialog.AnyFile
         #readOnly    = False
         modeOpen = False
+
+        '''
+        print('dir(dlgOptions): ', dir(dlgOptions))
+        print('dlgOptions.str(): ', dlgOptions.__str__())
+        print('dlgOptions.int(): ', dlgOptions.__int__())
+        print('int(dlgOptions): ', int(dlgOptions))
+        print('dlgOptions.format(): ', dlgOptions.__format__(''))
+        print('dlgOptions: ', str(dlgOptions))
+        print('dlgFileMode: ', dlgFileMode)
+        '''
 
         if 'options' in controlConfig :
             
@@ -1206,6 +1223,9 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
 
                 if opt=='native' : # if 'native' option gotten, reset DontUseNativeDialog flags
                     dlgOptions = dlgOptions & ~ QtWidgets.QFileDialog.DontUseNativeDialog
+
+                if opt=='not-native' : # if 'not-native' option gotten, set DontUseNativeDialog flags
+                    dlgOptions = dlgOptions | QtWidgets.QFileDialog.DontUseNativeDialog
 
                 elif opt=='confirm-overwrite' :
                     dlgOptions = dlgOptions & ~ QtWidgets.QFileDialog.DontConfirmOverwrite
@@ -1230,6 +1250,9 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
                 elif opt=='open' or opt=='open-dialog' :
                     modeOpen    = True
             
+                elif opt=='save' or opt=='save-dialog' :
+                    modeOpen    = False
+            
                 elif opt=='list' or opt=='files' :
                     dlgFileMode = QtWidgets.QFileDialog.ExistingFiles
             
@@ -1237,11 +1260,19 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
                 #    readOnly = True
             
 
+
+        print('int(dlgOptions): ', int(dlgOptions))
+        print('dlgFileMode: ', dlgFileMode)
+
         if dlgFileMode == QtWidgets.QFileDialog.ExistingFiles :
             raise ValueError('\'list\ mode not supported now')
 
         fileName = editCtrl.text()
-        filePath = os.path.dirname( os.path.abspath(fileName) )
+        #pairPathName = os.path.split(os.path.abspath(fileName))
+        pairPathName = os.path.split(fileName)
+        filePath     = pairPathName[0]
+        fileNameOnly = pairPathName[1]
+        #filePath = os.path.dirname( os.path.abspath(fileName) )
 
         if filePath=='' :
             filePath = defOpenFileDialogPath
@@ -1284,11 +1315,27 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
         fileDlg.setWindowTitle(curTitle)
 
 
-        if filePath!='' :
+        if filePath!=None and filePath!='':
             fileDlg.setDirectory( QtCore.QDir(filePath) )
 
+        if fileNameOnly!=None and fileNameOnly!='':
+            fileDlg.selectFile( fileNameOnly )
+
+        
 
         # https://doc.qt.io/qt-5/qfiledialog.html#setLabelText
+
+
+        #https://doc.qt.io/qt-5/qfiledialog.html#setNameFilter
+        if 'filters' in controlConfig :
+
+            filterSet = PwFilenameFilters.FilenameFilterSet( controlConfig['filters'] )
+            fileDlg.setNameFilters(filterSet.buildQtFilters())
+
+            flt = filterSet.findFilterByFilename(fileNameOnly)
+            if flt!=None :
+                qtFltStr = flt.buildQtFilter()
+                fileDlg.selectNameFilter(qtFltStr)
 
 
 
@@ -1602,6 +1649,7 @@ class PumbaWizard(QtWidgets.QWizard):
         self.button(self.FinishButton).clicked.connect( self.onFinish )
         self.currentIdChanged.connect( self.onPageChanged )
 
+
         numGuids = self.getConfigValue( 'generate-guids', None, 1 )
 
         #print('numGuids: ', numGuids)
@@ -1612,14 +1660,15 @@ class PumbaWizard(QtWidgets.QWizard):
         #https://docs.python.org/3/library/uuid.html#uuid.uuid1
         #uuid.RESERVED_MICROSOFT
 
+        #https://docs.python.org/2/library/uuid.html
         for guidN in range(numGuids) :
             # strWideness = strWideness.lower()
             guid = str(uuid.uuid4())
 
             guidVarName = 'guid'+str(guidN)
             GUIDVarName = 'GUID'+str(guidN)
-            print(guidVarName,': ',guid.lower())
-            print(GUIDVarName,': ',guid.upper())
+            #print(guidVarName,': ',guid.lower())
+            #print(GUIDVarName,': ',guid.upper())
 
             wizResultValues[guidVarName] = guid.lower()
             wizResultValues[GUIDVarName] = guid.upper()

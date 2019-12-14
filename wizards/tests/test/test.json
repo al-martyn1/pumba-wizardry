@@ -166,16 +166,18 @@
             [
                 { "target-value":"input-file",
                   "default":"test.txt",
-                  "options":"open-existing,readonly-edit,native"
+                  "options":"open-existing,readonly-edit,native",
+                  "filters":"Text files - *.txt; Ini Files - *.ini; All files - *"
                 },
 
                 { "target-value":"output-file",
-                  "options":"confirm-overwrite",
-                  "input-mask":""
+                  "options":"save-dialog,not-native",
+                  "filters":"Text files - *.txt; *.cpp *.cxx *.c; *.hpp *.hxx; Template files - *.tpl; All files - *"
                 },
 
                 { "target-value":"template-file",
-                  "options":"open-existing"
+                  "options":"open-existing",
+                  "filters":"Text files - *.txt; Template files - *.tpl; All files - *"
                 }
 
             ],

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "pumba-wizardry", "pumba-wizardry.pyproj", "{2017CE4A-027F-43B0-A475-A99291597E3D}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "pw-filename-filter", "pw-filename-filter.pyproj", "{E0DE43B5-F08D-4664-A8F2-76EB2ED735DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2017CE4A-027F-43B0-A475-A99291597E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2017CE4A-027F-43B0-A475-A99291597E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0DE43B5-F08D-4664-A8F2-76EB2ED735DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0DE43B5-F08D-4664-A8F2-76EB2ED735DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
