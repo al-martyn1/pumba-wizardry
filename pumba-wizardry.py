@@ -1823,7 +1823,7 @@ class PumbaWizard(QtWidgets.QWizard):
         completionMessage = self.getConfigValue( 'show-completion-message', cliArgs.show_completion_message, None )
 
         if completionMessage!=None and completionMessage!='' :
-            simpleMessage( completionMessage ) :
+            simpleMessage( completionMessage )
 
 
         pass

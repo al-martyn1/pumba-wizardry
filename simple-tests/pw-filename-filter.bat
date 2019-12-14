@@ -1,2 +1,2 @@
 cls
-py pw-filename-filter.py
+py ..\pw-filename-filter.py

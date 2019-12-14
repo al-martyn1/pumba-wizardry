@@ -1,1 +1,1 @@
-call wizards\tests\test-logo.bat -v
+call ..\wizards\tests\test-logo.bat -v

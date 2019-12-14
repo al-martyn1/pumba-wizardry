@@ -1,1 +1,1 @@
-call super-pumba\super-pumba.bat -v
+call ..\super-pumba\super-pumba.bat -v
