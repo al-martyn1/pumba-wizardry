@@ -27,7 +27,7 @@ class PumbaWizardArgParser :
                                    , action="store_true"
                                    )
     
-        self.argParser.add_argument( "-s", "--style", help="Set wizard window style: classic, modern, mac, aero (override config value)"
+        self.argParser.add_argument( "-s", "--style", help="Set wizard window style: classic, modern, mac, aero (overrides config value)"
                                    , type=str
                                    )
     
@@ -43,10 +43,14 @@ class PumbaWizardArgParser :
                                    , type=str
                                    )
     
-        self.argParser.add_argument( "-T", "--title", help="Set wizard window title (override config value)"
+        self.argParser.add_argument( "-T", "--title", help="Set wizard window title (overrides config value)"
                                    , type=str
                                    )
-    
+
+        self.argParser.add_argument( "-C", "--show-completion-message", help="Displays a message after successful completion (overrides config value)"
+                                   , type=str
+                                   )
+
         self.argParser.add_argument( "--caller", help="Set wizard caller script full name. For .bat files good value is the '--caller %%~dpnx0'"
                                    , type=str
                                    )
@@ -56,11 +60,11 @@ class PumbaWizardArgParser :
                                    , help="Add wizard definition jay-son file (.json)"
                                    )
 
-        self.argParser.add_argument( "--template", help="Set name of wizard template file (override config value)"
+        self.argParser.add_argument( "--template", help="Set name of wizard template file (overrides config value)"
                                    , type=str
                                    )
     
-        self.argParser.add_argument( "-o", "--output", help="Set name of wizard output file (override config value)"
+        self.argParser.add_argument( "-o", "--output", help="Set name of wizard output file (overrides config value)"
                                    , type=str
                                    )
     

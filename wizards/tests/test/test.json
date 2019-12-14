@@ -14,9 +14,14 @@
       "generate-guids":5,
 
       "template":"$template-file",
+      "template-buddies":"+.app,.rep", 
+
       "output"  :"$output-file",
+      "output-buddies":"+.app,.rep",
 
       "force-single-line":0,
+
+      "show-completion-message":"Job done"
 
       "dummy-last":""
     },

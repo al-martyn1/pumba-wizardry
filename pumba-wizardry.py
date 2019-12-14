@@ -43,6 +43,8 @@ WizSizeMan   = __import__( 'pumba-wizsizeman', [], [], ['WizardSizeManager']    
 WizArgParser = __import__( 'pumba-wizargs'   , [], [], ['PumbaWizardArgParser'] )
 pwutils      = __import__( 'pw-utils'   , [], [], ['deepupdate'] )
 PwFilenameFilters = __import__( 'pw-filename-filter'   , [], [], ['FilenameFilterSet','FilenameFilter'] )
+PwBuddies    = __import__( 'pw-buddies'   , [], [], ['generateBuddies'] )
+
 
 
 
@@ -1767,17 +1769,11 @@ class PumbaWizard(QtWidgets.QWizard):
         if templateFileDir==None or templateFileDir=='' :
             templateFile = os.path.join(wizResourcesPath, templateFile )
 
+
+        templateList = PwBuddies.generateBuddies( templateFile, self.getConfigValue( 'template-buddies', None, None ) )
+
         if isVeboseMode() :
-            print( 'templateFile: ', templateFile )
-
-
-
-        # !!!RENDER
-        # https://docs.makotemplates.org/en/latest/usage.html
-        resTpl = MakoTemplate( filename=templateFile)
-
-        # https://docs.makotemplates.org/en/latest/syntax.html
-        renderResult = resTpl.render( wiz=wizResultValues )
+            print( 'templateList: ', templateList )
 
 
         outputFile = self.getConfigValue( 'output', cliArgs.output, None )
@@ -1797,13 +1793,38 @@ class PumbaWizard(QtWidgets.QWizard):
             print( renderResult )
             return None
 
+        outputList = PwBuddies.generateBuddies( outputFile, self.getConfigValue( 'output-buddies', None, None ) )
 
         if isVeboseMode() :
-            print( 'outputFile  : ', outputFile )
+            print( 'outputList  : ', outputList )
 
 
-        with open( outputFile, 'w') as outputFileHandle:
-            outputFileHandle.write(renderResult)
+        if len(templateList)!=len(outputList) :
+            raise ValueError( 'Templates list size missmathes output list size' )
+
+        for i in range( len(templateList) ) :
+
+            tplFileName = templateList[i]
+            outFileName = outputList[i]
+
+
+            # !!!RENDER
+            # https://docs.makotemplates.org/en/latest/usage.html
+            tpl = MakoTemplate( filename=tplFileName )
+
+            # https://docs.makotemplates.org/en/latest/syntax.html
+            renderResult = tpl.render( wiz=wizResultValues )
+
+            with open( outFileName, 'w') as outputFileHandle:
+                outputFileHandle.write(renderResult)
+
+
+
+        completionMessage = self.getConfigValue( 'show-completion-message', cliArgs.show_completion_message, None )
+
+        if completionMessage!=None and completionMessage!='' :
+            simpleMessage( completionMessage ) :
+
 
         pass
     
