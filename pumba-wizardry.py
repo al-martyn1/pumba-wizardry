@@ -1261,8 +1261,8 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
             
 
 
-        print('int(dlgOptions): ', int(dlgOptions))
-        print('dlgFileMode: ', dlgFileMode)
+        #print('int(dlgOptions): ', int(dlgOptions))
+        #print('dlgFileMode: ', dlgFileMode)
 
         if dlgFileMode == QtWidgets.QFileDialog.ExistingFiles :
             raise ValueError('\'list\ mode not supported now')
