@@ -1735,6 +1735,7 @@ class PumbaWizard(QtWidgets.QWizard):
         global wizResultValues
         global cliArgs
         global wizResourcesPath
+        global wizOptions
 
         self.successCompleted = True
 
@@ -1751,6 +1752,11 @@ class PumbaWizard(QtWidgets.QWizard):
 
         #wizResultValues  = {}
         #self.simpleMessage('onFinish')
+
+        if 'buddies' in wizOptions :
+            wizOptions['template-buddies'] = wizOptions['buddies']
+            wizOptions['output-buddies']   = wizOptions['buddies']
+
 
         templateFile = self.getConfigValue( 'template', cliArgs.template, wizRcDirName + '.txt' )
 
