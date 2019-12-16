@@ -13,6 +13,8 @@
 
       "template":"rdlc-wizard.txt",
 
+      "show-completion-message":"Job done",
+
       "dummy-last":""
     },
 
