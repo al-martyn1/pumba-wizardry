@@ -11,6 +11,8 @@
       "image":"rdlc_img.png",
       "style":"classic",
 
+      "template":"rdlc-wizard.txt",
+
       "dummy-last":""
     },
 

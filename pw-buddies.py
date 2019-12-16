@@ -10,14 +10,13 @@ import copy
 #--------------------------------------------------
 def generateBuddies( fileName, buddiesListStr ) :
 
-    buddiesList = []
-    buddiesList.append(fileName)
+    buddiesList = [ fileName ]
+    #buddiesList.append(fileName)
 
     if buddiesListStr==None or buddiesListStr=='' :
         return buddiesList
 
-
-    resNames = fileName
+    #resNames = fileName
     pe = os.path.splitext(fileName)
     fileNameNoExt = pe[0]
 
@@ -40,6 +39,10 @@ def generateBuddies( fileName, buddiesListStr ) :
 
         if buddyExt[0]!='.' :
             buddyExt = '.' + buddyExt
+
+        if fileName==None or fileName=='' or fileName=='-' :
+            buddiesList.append( fileName )
+            continue
 
         if appendMode==True :
             buddiesList.append( fileName + buddyExt )

@@ -1,1 +1,1 @@
-py %~dp0..\..\pumba-wizardry.py --caller %~dpnx0 %*
+py %~dp0..\..\pumba-wizardry.py -v --caller %~dpnx0 %*

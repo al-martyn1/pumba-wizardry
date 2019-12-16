@@ -1758,9 +1758,12 @@ class PumbaWizard(QtWidgets.QWizard):
             wizOptions['output-buddies']   = wizOptions['buddies']
 
 
-        templateFile = self.getConfigValue( 'template', cliArgs.template, wizRcDirName + '.txt' )
+        templateFile = self.getConfigValue( 'template', cliArgs.template, '-' ) #wizRcDirName + '.txt'
 
-        if templateFile=='-' :
+        if isVeboseMode() :
+            print( 'templateFile: ', templateFile )
+
+        if templateFile==None or templateFile=='' or templateFile=='-' :
             return None # nothing to do
 
         #if len(templateFile)>0 and templateFile[0]=='$' :
@@ -1784,20 +1787,24 @@ class PumbaWizard(QtWidgets.QWizard):
 
         outputFile = self.getConfigValue( 'output', cliArgs.output, None )
 
+        '''
         if outputFile=='-' :
             print( 'Template rendering result:' )
             print( renderResult )
             return None # nothing to do
+        '''
 
         #if len(templateFile)>0 and templateFile[0]=='$' :
         if outputFile!=None and outputFile.find('$')==0 :
             # slice - https://www.digitalocean.com/community/tutorials/how-to-index-and-slice-strings-in-python-3
             outputFile = wizResultValues[outputFile[1:]]
 
+        '''
         if outputFile==None or outputFile=='' or outputFile=='-' :
             print( 'Template rendering result:' )
             print( renderResult )
             return None
+        '''
 
         outputList = PwBuddies.generateBuddies( outputFile, self.getConfigValue( 'output-buddies', None, None ) )
 
@@ -1820,6 +1827,12 @@ class PumbaWizard(QtWidgets.QWizard):
 
             # https://docs.makotemplates.org/en/latest/syntax.html
             renderResult = tpl.render( wiz=wizResultValues )
+
+
+            if outFileName==None or outFileName=='' or outFileName=='-' :
+                print( 'Template \'', tplFileName, '\' rendering result: ' )
+                print( renderResult )
+                continue # nothing to do
 
             with open( outFileName, 'w') as outputFileHandle:
                 outputFileHandle.write(renderResult)
@@ -1867,6 +1880,8 @@ def parseWizardryJaysonData( jaysonPath, json_data ) :
 
         if key == 'wizard' :
 
+            # Image files path correction
+
             if 'icon' in val:
                 if val['icon'] != '':
                     val['icon'] = os.path.abspath( os.path.join(jaysonPath, val['icon'] ) )
@@ -1882,6 +1897,13 @@ def parseWizardryJaysonData( jaysonPath, json_data ) :
             if 'banner' in val :
                 if val['banner'] != '':
                     val['banner'] = os.path.abspath( os.path.join(jaysonPath, val['banner'] ) )
+
+            # Other files path correction
+
+            if 'template' in val :
+                if val['template'] != '' :
+                    val['template'] = os.path.abspath( os.path.join(jaysonPath, val['template'] ) )
+
 
             #wizOptions.update(val)
             pwutils.deepupdate(wizOptions,val)
