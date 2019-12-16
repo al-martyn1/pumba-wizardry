@@ -169,18 +169,18 @@
 
           "fileselections":
             [
-                { "target-value":"input-file",
+                { "target-var":"input-file",
                   "default":"test.txt",
                   "options":"open-existing,readonly-edit,native",
                   "filters":"Text files - *.txt; Ini Files - *.ini; All files - *"
                 },
 
-                { "target-value":"output-file",
+                { "target-var":"output-file",
                   "options":"save-dialog,not-native",
                   "filters":"Text files - *.txt; *.cpp *.cxx *.c; *.hpp *.hxx; Template files - *.tpl; All files - *"
                 },
 
-                { "target-value":"template-file",
+                { "target-var":"template-file",
                   "options":"open-existing",
                   "filters":"Text files - *.txt; Template files - *.tpl; All files - *"
                 }
@@ -204,45 +204,45 @@
           "editfields":
             [
                 { "title":"Edit 1",
-                  "target-value":"edit-val-1",
-                  "target-value-title":"Overrided target value title",
+                  "target-var":"edit-val-1",
+                  "target-var-title":"Overrided target value title",
                   "default":"Text1"
                 },
 
                 { 
-                  "target-value":"edit-val-2",
+                  "target-var":"edit-val-2",
                   "input-mask":""
                 },
 
                 { "title":"Edit 3",
-                  "target-value":"edit-val-3"
+                  "target-var":"edit-val-3"
                 },
 
-                { "target-value":"edit-val-phone-1",
+                { "target-var":"edit-val-phone-1",
                   "default":"+1 (123) 456-78-90"
                 },
 
-                { "target-value":"edit-val-phone-2",
+                { "target-var":"edit-val-phone-2",
                   "placeholder":"+1 (123) 456-78-90"
                 },
 
-                { "target-value":"edit-val-phone-3",
+                { "target-var":"edit-val-phone-3",
                   "placeholder":"+1 (123) 456-78-90",
                   "mask":"+D (DDD) DDD-DD-DD;X"
                 },
 
                 { "title":"Mode - password-echo",
-                  "target-value":"password1",
+                  "target-var":"password1",
                   "mode":"password-echo"
                 },
 
                 { "title":"Mode - password",
-                  "target-value":"password2",
+                  "target-var":"password2",
                   "mode":"password"
                 },
 
                 { "title":"Mode - silent",
-                  "target-value":"password3",
+                  "target-var":"password3",
                   "mode":"silent"
                 }
 
@@ -261,13 +261,13 @@
 
           "next-page":"dropdowns-test",
 
-          "target-value":"listsinglesel-test",
-          "target-value-title":"Single Selection List test",
+          "target-var":"listsinglesel-test",
+          "target-var-title":"Single Selection List test",
 
           "list-choice":
             [
-              { "value":"radio-choise-1"   },
-              { "value":"radio-choise-2"   },
+              { "value":"radio-choise-1", "setwo":[ {"buddies":".def"} ] },
+              { "value":"radio-choise-2", "appwo":[ {"buddies":".bla"} ] },
               { "value":"radio-choise-3"   },
               { "value":"dropdown-val-1"   },
               { "value":"dropdown-val-2"   },
@@ -293,8 +293,8 @@
           "dropdowns":
             [
                 { "title":"Dropdown 1",
-                  "target-value":"dropdown1-res",
-                  "target-value-title":"Dropdown 1",
+                  "target-var":"dropdown1-res",
+                  "target-var-title":"Dropdown 1",
                   "add-values-long-title":1,
                   "values":
                     [
@@ -305,7 +305,7 @@
                 },
 
                 { "title":"Dropdown 2",
-                  "target-value":"dropdown2-res",
+                  "target-var":"dropdown2-res",
                   "use-values-long-title":1,
                   "values":
                     [
@@ -315,7 +315,7 @@
                 },
 
                 { "title":"Dropdown 3 - same as Dropdown 2, but without default value",
-                  "target-value":"dropdown3-res",
+                  "target-var":"dropdown3-res",
                   "values":
                     [
                       { "value":"dropdown-val-1"   },
@@ -337,8 +337,8 @@
 
           "next-page":"test-page3",
 
-          "target-value":"radiobuttons-test",
-          "target-value-title":"Radiobuttons test",
+          "target-var":"radiobuttons-test",
+          "target-var-title":"Radiobuttons test",
 
           "default-choice":"radio-choise-3",
           "radio-choice":
@@ -366,8 +366,8 @@
           "dropdowns":
             [
                 { "title":"Select value",
-                  "target-value":"optional-dropdown-res",
-                  "target-value-title":"Optional Dropdown Value",
+                  "target-var":"optional-dropdown-res",
+                  "target-var-title":"Optional Dropdown Value",
                   "values":
                     [
                       { "value":"dropdown-optional-val-1"   },

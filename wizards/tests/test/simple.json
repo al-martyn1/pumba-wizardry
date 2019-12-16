@@ -105,8 +105,8 @@
 
           "next-page":"dropdowns-test",
 
-          "target-value":"listsinglesel-test",
-          "target-value-title":"Single Selection List test",
+          "target-var":"listsinglesel-test",
+          "target-var-title":"Single Selection List test",
 
           "list-choice":
             [
@@ -139,8 +139,8 @@
           "dropdowns":
             [
                 { "title":"Dropdown 1",
-                  "target-value":"dropdown1-res",
-                  "target-value-title":"Dropdown 1",
+                  "target-var":"dropdown1-res",
+                  "target-var-title":"Dropdown 1",
                   "add-values-long-title":1,
                   "values":
                     [
@@ -151,7 +151,7 @@
                 },
 
                 { "title":"Dropdown 2",
-                  "target-value":"dropdown2-res",
+                  "target-var":"dropdown2-res",
                   "use-values-long-title":1,
                   "values":
                     [
@@ -161,7 +161,7 @@
                 },
 
                 { "title":"Dropdown 3 - same as Dropdown 2, but without default value",
-                  "target-value":"dropdown3-res",
+                  "target-var":"dropdown3-res",
                   "values":
                     [
                       { "value":"dropdown-val-1"   },
@@ -185,8 +185,8 @@
 
           "next-page":"test-page3",
 
-          "target-value":"radiobuttons-test",
-          "target-value-title":"Radiobuttons test",
+          "target-var":"radiobuttons-test",
+          "target-var-title":"Radiobuttons test",
 
           "default-choice":"radio-choise-3",
           "radio-choice":
@@ -216,8 +216,8 @@
           "dropdowns":
             [
                 { "title":"Select value",
-                  "target-value":"optional-dropdown-res",
-                  "target-value-title":"Optional Dropdown Value",
+                  "target-var":"optional-dropdown-res",
+                  "target-var-title":"Optional Dropdown Value",
                   "values":
                     [
                       { "value":"dropdown-optional-val-1"   },

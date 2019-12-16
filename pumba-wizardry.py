@@ -181,30 +181,49 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
         self.page_type = config['page-type']
         self.pushResultOrderInfoPageName()
 
-        if 'target-value' in self.config :
-            #wizResultOrder.append( self.config['target-value'] )
-            self.pushResultOrderInfo( self.config['target-value'] )
-            if 'target-value-title' in self.config :
-                self.setTargetValueTitle( self.config['target-value'], self.config['target-value-title'] )
-                #wizResultTitles[ self.config['target-value'] ] = self.config['target-value-title']
+        if 'target-var' in self.config :
+            #wizResultOrder.append( self.config['target-var'] )
+            self.pushResultOrderInfo( self.config['target-var'] )
+            if 'target-var-title' in self.config :
+                self.setTargetVarTitle( self.config['target-var'], self.config['target-var-title'] )
+                #wizResultTitles[ self.config['target-var'] ] = self.config['target-var-title']
 
 
     #-----
+    def checkProcessSetAppendWizardOptions( self, itemOpts ) :
 
-    def setTargetValueTitle( self, targetValueName, targetValueTitle ) :
+        # { "value":"radio-choise-1", "setwo":[ {"buddies":".def"} ] },
+
+        global wizOptions
+
+        if 'setwo' in itemOpts :
+
+            setwoItems = itemOpts['setwo']
+
+            pass
+
+
+        #for valName, val in wizResultValues.items() :
+
+
+
+    
+    #-----
+
+    def setTargetVarTitle( self, targetVarName, targetValueTitle ) :
 
         global wizResultTitles  # = {}
-        wizResultTitles[ targetValueName ] = targetValueTitle
+        wizResultTitles[ targetVarName ] = targetValueTitle
 
 
     #-----
 
-    def pushResultOrderInfo( self, targetValueName ) :
+    def pushResultOrderInfo( self, targetVarName ) :
 
         global wizResultOrder   # = []
 
-        if targetValueName not in wizResultOrder :
-            wizResultOrder.append( targetValueName )
+        if targetVarName not in wizResultOrder :
+            wizResultOrder.append( targetVarName )
 
 
     #-----
@@ -344,13 +363,13 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
 
     #-----
 
-    def setTargetValue( self, value, targetValue = None ) :
+    def setTargetVar( self, value, targetValue = None ) :
 
         global wizResultValues
 
         if targetValue==None :
-            if 'target-value' in self.config :
-                wizResultValues[self.config['target-value']] = value
+            if 'target-var' in self.config :
+                wizResultValues[self.config['target-var']] = value
         else :
             wizResultValues[targetValue] = value
 
@@ -363,10 +382,10 @@ class PumbaWizardPageBase(QtWidgets.QWizardPage):
         global wizResultValues
 
         if targetValue==None :
-            if 'target-value' in self.config :
-                targetValueName = self.config['target-value']
-                if targetValueName in wizResultValues :
-                    del wizResultValues[targetValueName]
+            if 'target-var' in self.config :
+                targetVarName = self.config['target-var']
+                if targetVarName in wizResultValues :
+                    del wizResultValues[targetVarName]
         else :
             if targetValue in wizResultValues :
                 del wizResultValues[targetValue]
@@ -583,9 +602,9 @@ class PumbaWizardPageRadioChoice(PumbaWizardPageBase):
         elif 'next-page' in self.config :
             wizDynamicNext[self.page_name] = self.config['next-page']
 
-        #self.setTargetValue( copy.deepcopy(name) )
+        #self.setTargetVar( copy.deepcopy(name) )
         if name!='' :
-            self.setTargetValue( name )
+            self.setTargetVar( name )
         else :
             self.clearTargetValue()
 
@@ -752,7 +771,7 @@ class PumbaWizardPageListSingleSel(PumbaWizardPageBase):
                 wizDynamicNext[self.page_name] = self.config['next-page']
 
             if 'value' in radioButtonConfig:
-                self.setTargetValue( radioButtonConfig['value'] )
+                self.setTargetVar( radioButtonConfig['value'] )
                 #print()
             else :
                 self.clearTargetValue()
@@ -795,7 +814,7 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
 
         for dropdownConfig in dropdownConfigList :
 
-            targetValue = dropdownConfig['target-value']
+            targetValue = dropdownConfig['target-var']
 
             title = ''
             if targetValue in wizConfigValues :
@@ -805,11 +824,11 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
                 title = dropdownConfig['title']
 
             #title = dropdownConfig['title']
-            #targetValue = dropdownConfig['target-value']
+            #targetValue = dropdownConfig['target-var']
             
             targetValueTitle = targetValue
-            if 'target-value-title' in dropdownConfig :
-                targetValueTitle = dropdownConfig['target-value-title']
+            if 'target-var-title' in dropdownConfig :
+                targetValueTitle = dropdownConfig['target-var-title']
 
             dropdown = QtWidgets.QComboBox( )
 
@@ -871,7 +890,7 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
                 self.onComboboxIndexChanged( defValueIdx, comboboxNumber, targetValue ) # not called while calling setCurrentIndex
 
             self.pushResultOrderInfo( targetValue )
-            self.setTargetValueTitle( targetValue, targetValueTitle )
+            self.setTargetVarTitle( targetValue, targetValueTitle )
 
 
             self.checkAddExtraVerticalSpacing( comboboxNumber, doVertIntervals )
@@ -898,9 +917,9 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
 
     #-----
 
-    def onComboboxIndexChanged( self, comboboxSelectionIdx, comboboxId, targetValueNameArg ) :
+    def onComboboxIndexChanged( self, comboboxSelectionIdx, comboboxId, targetVarNameArg ) :
 
-        #s = 'Combo \'' + str(comboboxId) + '\' target value: \'' + targetValueName + '\' - value changed to idx: ' + str(comboboxSelectionIdx)
+        #s = 'Combo \'' + str(comboboxId) + '\' target value: \'' + targetVarName + '\' - value changed to idx: ' + str(comboboxSelectionIdx)
         # self.simpleMessage( s )
 
         global wizDynamicNext
@@ -909,12 +928,12 @@ class PumbaWizardPageDropdowns(PumbaWizardPageBase):
         dropdownConfigList = self.config['dropdowns']
         dropdownConfig  = dropdownConfigList[comboboxId]
         dropdownValues  = dropdownConfig['values']
-        targetValueName = dropdownConfig['target-value']
+        targetVarName   = dropdownConfig['target-var']
         valueInfo = dropdownValues[comboboxSelectionIdx]
         #valueInfo['value']
 
-        #def setTargetValue( self, value, targetValue = None ) :
-        self.setTargetValue( valueInfo['value'], targetValueName )
+        #def setTargetVar( self, value, targetValue = None ) :
+        self.setTargetVar( valueInfo['value'], targetVarName )
 
        
 
@@ -954,7 +973,7 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
 
         for controlConfig in controlsConfigList :
 
-            targetValue = controlConfig['target-value']
+            targetValue = controlConfig['target-var']
 
             title = ''
             if targetValue in wizConfigValues :
@@ -964,8 +983,8 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
                 title = controlConfig['title']
             
             targetValueTitle = targetValue
-            if 'target-value-title' in controlConfig :
-                targetValueTitle = controlConfig['target-value-title']
+            if 'target-var-title' in controlConfig :
+                targetValueTitle = controlConfig['target-var-title']
 
 
             ctrl = QtWidgets.QLineEdit( )
@@ -1012,7 +1031,7 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
 
 
             self.pushResultOrderInfo( targetValue )
-            self.setTargetValueTitle( targetValue, targetValueTitle )
+            self.setTargetVarTitle( targetValue, targetValueTitle )
 
             self.checkAddExtraVerticalSpacing( controlNumber, doVertIntervals )
             self.addVerticalSpacing(doVertIntervals)
@@ -1059,7 +1078,7 @@ class PumbaWizardPageEdits(PumbaWizardPageBase):
         global wizDynamicNext
         global wizResultValues
 
-        self.setTargetValue( ctrlText, varName )
+        self.setTargetVar( ctrlText, varName )
        
 
 
@@ -1098,7 +1117,7 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
 
         for controlConfig in controlsConfigList :
 
-            targetValue = controlConfig['target-value']
+            targetValue = controlConfig['target-var']
 
             title = ''
             if targetValue in wizConfigValues :
@@ -1108,8 +1127,8 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
                 title = controlConfig['title']
             
             targetValueTitle = targetValue
-            if 'target-value-title' in controlConfig :
-                targetValueTitle = controlConfig['target-value-title']
+            if 'target-var-title' in controlConfig :
+                targetValueTitle = controlConfig['target-var-title']
 
 
             ctrl = QtWidgets.QLineEdit( )
@@ -1134,7 +1153,7 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
 
 
             self.pushResultOrderInfo( targetValue )
-            self.setTargetValueTitle( targetValue, targetValueTitle )
+            self.setTargetVarTitle( targetValue, targetValueTitle )
 
             self.checkAddExtraVerticalSpacing( controlNumber, doVertIntervals )
             self.addVerticalSpacing(doVertIntervals)
@@ -1401,7 +1420,7 @@ class PumbaWizardPageFileselections(PumbaWizardPageBase):
         global wizDynamicNext
         global wizResultValues
 
-        self.setTargetValue( ctrlText, varName )
+        self.setTargetVar( ctrlText, varName )
 
 
 
@@ -2272,9 +2291,9 @@ def fillSuperPumbaConfig( ) :
     json_data['pages']['super-pumba']['subtitle']    = 'Wizard selection from list of installed wizards'
     json_data['pages']['super-pumba']['description'] = 'Select Wizard which your want to open:'
 
-    json_data['pages']['super-pumba']['next-page']    = 'summary'
-    json_data['pages']['super-pumba']['target-value'] = 'selected-wizard'
-    json_data['pages']['super-pumba']['target-value-title'] = 'Selected wizard'
+    json_data['pages']['super-pumba']['next-page']        = 'summary'
+    json_data['pages']['super-pumba']['target-var']       = 'selected-wizard'
+    json_data['pages']['super-pumba']['target-var-title'] = 'Selected wizard'
 
     json_data['pages']['super-pumba']['radio-choice'] = wizardSelectionPageValues # radioChoice
 
