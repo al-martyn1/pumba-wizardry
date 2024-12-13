@@ -1,2 +1,2 @@
 cls
-py ..\pw-filename-filter.py
+python ..\pw-filename-filter.py

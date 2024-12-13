@@ -1,2 +1,2 @@
 cls
-py ..\pw-buddies.py
+python ..\pw-buddies.py
